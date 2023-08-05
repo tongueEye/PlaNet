@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1061544614415",
+    "project_id": "planet-demo-edf32",
+    "storage_bucket": "planet-demo-edf32.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1061544614415:android:6c938f70e3842b59ffa17a",
+        "android_client_info": {
+          "package_name": "com.example.planet_demo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1061544614415-8dbsrqsocamm783a9o2hp35phoiibkt9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBi6kiBzEUGmjyDQJ4VIrzk-y0dqQ0LrCA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1061544614415-8dbsrqsocamm783a9o2hp35phoiibkt9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
