@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="70dp"
         android:orientation="vertical">
 
         <com.google.android.material.textfield.TextInputLayout
@@ -28,7 +28,8 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp">
 
-            <EditText android:id="@+id/email_edittext"
+            <EditText
+                android:id="@+id/email_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_edittext_background"
@@ -43,17 +44,19 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp">
 
-            <EditText android:id="@+id/password_edittext"
-                android:inputType="textPassword"
+            <EditText
+                android:id="@+id/password_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_edittext_background"
                 android:backgroundTint="@color/colorBlue"
                 android:hint="@string/password"
+                android:inputType="textPassword"
                 android:padding="9dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <Button android:id="@+id/email_login_button"
+        <Button
+            android:id="@+id/email_login_button"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginLeft="40dp"
@@ -66,16 +69,7 @@
             android:textColor="@color/colorWhite" />
 
         <Button
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:layout_marginBottom="5dp"
-            android:background="@drawable/btn_signin_facebook"
-            android:text="@string/signin_facebook"
-            android:textColor="@color/colorWhite" />
-
-        <Button
+            android:id="@+id/google_sign_in_button"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginLeft="40dp"

@@ -16,7 +16,6 @@
 
     <string name="signin_email">로그인/회원가입</string>
     <string name="signin_google">Google 로그인</string>
-    <string name="signin_facebook">Facebook 로그인</string>
     <string name="signup_complete">Membership success</string>
     <string name="signin_complete">Login success</string>
     <string name="signout">Signout</string>
