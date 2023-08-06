@@ -6,7 +6,12 @@
         <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/drawable/rounded_button_background.xml" value="0.1055" />
         <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/drawable/rounded_edittext_background.xml" value="0.1055" />
         <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/activity_login.xml" value="0.22" />
-        <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/activity_main.xml" value="0.15572916666666667" />
+        <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/fragment_alarm.xml" value="0.278125" />
+        <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/fragment_detail.xml" value="0.27708333333333335" />
+        <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/fragment_grid.xml" value="0.278125" />
+        <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/fragment_user.xml" value="0.278125" />
+        <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/menu/bottom_navigation_main.xml" value="0.27708333333333335" />
       </map>
     </option>
   </component>
