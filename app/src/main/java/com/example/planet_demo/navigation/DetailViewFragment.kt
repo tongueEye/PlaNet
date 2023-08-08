@@ -41,6 +41,10 @@ class DetailViewFragment : Fragment(){
             firestore?.collection("images")?.orderBy("timestamp")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                 contentDTOs.clear()
                 contentUidList.clear()
+
+                //Sometimes,This code return null of querySnapshot when it signout
+                if(querySnapshot==null) return@addSnapshotListener
+
                 for(snapshot in querySnapshot!!.documents){
                     var item=snapshot.toObject(ContentDTO::class.java)
                     contentDTOs.add(item!!)
@@ -88,11 +92,22 @@ class DetailViewFragment : Fragment(){
                 //This is unlike status
                 viewholder.detailviewitem_favorite_imageview.setImageResource(R.drawable.ic_favorite_border)
             }
+
+            //This code is when the profile image
+            viewholder.detailviewitem_profile_image.setOnClickListener {
+                var fragment=UserFragment()
+                var bundle=Bundle()
+                bundle.putString("destinationUid",contentDTOs[position].uid)
+                bundle.putString("userId",contentDTOs[position].userId)
+                fragment.arguments=bundle
+                activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.main_content,fragment)?.commit()
+            }
         }
 
         fun favoriteEvent(position: Int){
             var tsDoc=firestore?.collection("images")?.document(contentUidList[position])
             firestore?.runTransaction { transaction->
+
                 var uid=FirebaseAuth.getInstance().currentUser?.uid
                 var contentDTO=transaction.get(tsDoc!!).toObject(ContentDTO::class.java)
 

@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.planet_demo.navigation.AlarmFragment
@@ -20,6 +21,7 @@ import java.util.jar.Manifest
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        setToolbarDefault()
         when (item.itemId) {
             R.id.action_home -> {
                 var detailViewFragment = DetailViewFragment()
@@ -53,6 +55,12 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
             }
         }
         return false
+    }
+    //뒤로가기 버튼과 유저 이름이 기본적으로 숨겨져 있게 하는 코드
+    fun setToolbarDefault(){
+        toolbar_username.visibility=View.GONE
+        toolbar_btn_back.visibility=View.GONE
+        toolbar_title_image.visibility=View.VISIBLE
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
