@@ -154,11 +154,11 @@ class UserFragment : Fragment(){
 
             if(followDTO!!.followers.containsKey(currentUserUid)){
                 //It cancel my follower when i follow a third person (팔로우 했을 경우 팔로우 취소)
-                followDTO!!.followerCount=followDTO!!.followerCount-1
+                followDTO!!.followerCount=followDTO!!.followerCount.minus(1)
                 followDTO!!.followers.remove(currentUserUid)
             }else{
                 //It add my follower when i don't follow a third person (팔로우 안했을 경우 팔로우 추가)
-                followDTO!!.followerCount=followDTO!!.followerCount+1
+                followDTO!!.followerCount=followDTO!!.followerCount.plus(1)
                 followDTO!!.followers[currentUserUid!!]=true
             }
             transaction.set(tsDocFollower,followDTO!!)
