@@ -22,6 +22,7 @@ import com.example.planet_demo.navigation.model.ContentDTO
 import com.example.planet_demo.navigation.model.FollowDTO
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_user.view.*
 
@@ -31,6 +32,8 @@ class UserFragment : Fragment(){
     var uid: String?=null
     var auth: FirebaseAuth?=null
     var currentUserUid:String?=null
+    var followListenerRegistration:ListenerRegistration?=null
+
     companion object{
         var PICK_PROFILE_FROM_ALBUM=10
     }
@@ -88,7 +91,7 @@ class UserFragment : Fragment(){
 
     //팔로워 수와 팔로잉 데이터베이스에서 실시간으로 가져와서 ui 화면에 출력
     fun getFollowerAndFollowing(){
-        firestore?.collection("users")?.document(uid!!)?.addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
+        followListenerRegistration=firestore?.collection("users")?.document(uid!!)?.addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
             if(documentSnapshot==null) return@addSnapshotListener
             var followDTO=documentSnapshot.toObject(FollowDTO::class.java)
             if (followDTO?.followingCount!=null){
@@ -98,11 +101,13 @@ class UserFragment : Fragment(){
                 fragmentView?.account_tv_follower_count?.text=followDTO?.followerCount?.toString()
                 if(followDTO?.followers?.containsKey(currentUserUid!!) == true){
                     //팔로워 목록에 내가 있을 경우, 팔로우 버튼 누르면 팔로우 취소
+                    //fragmentView?.account_btn_follow_signout?.text="FOLLOW CANCLE"
                     fragmentView?.account_btn_follow_signout?.text=getString(R.string.follow_cancel)
-                    fragmentView?.account_btn_follow_signout?.background?.setColorFilter(ContextCompat.getColor(requireActivity(),R.color.colorLightGray),PorterDuff.Mode.MULTIPLY)
+                    fragmentView?.account_btn_follow_signout?.background?.setColorFilter(ContextCompat.getColor(requireActivity(),R.color.colorLightGray), PorterDuff.Mode.MULTIPLY)
                 }else{
                     if(uid!=currentUserUid){
                         //팔로워 목록에 없을 경우, 팔로우 버튼 누르면 팔로우
+                        //fragmentView?.account_btn_follow_signout?.text="FOLLOW"
                         fragmentView?.account_btn_follow_signout?.text=getString(R.string.follow)
                         //상대방 user fragment 일 때, background color 변경
                         fragmentView?.account_btn_follow_signout?.background?.colorFilter=null
@@ -111,6 +116,11 @@ class UserFragment : Fragment(){
                 }
             }
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        followListenerRegistration?.remove()
     }
 
     fun requestFollow(){
@@ -130,11 +140,11 @@ class UserFragment : Fragment(){
             if (followDTO.followings.containsKey(uid)){
                 //It remove following third person when a third person follow me
                 followDTO?.followingCount= followDTO?.followingCount?.minus(1)!!
-                followDTO?.followers?.remove(uid)
+                followDTO?.followings?.remove(uid)
             }else{
                 //It add following third person when a third person do not follow me
                 followDTO?.followingCount= followDTO?.followingCount?.plus(1)!!
-                followDTO?.followers?.set(uid!!, true)
+                followDTO?.followings!![uid!!]=true
             }
             transaction.set(tsDocFollowing,followDTO)
             return@runTransaction
@@ -155,7 +165,7 @@ class UserFragment : Fragment(){
             if(followDTO!!.followers.containsKey(currentUserUid)){
                 //It cancel my follower when i follow a third person (팔로우 했을 경우 팔로우 취소)
                 followDTO!!.followerCount=followDTO!!.followerCount.minus(1)
-                followDTO!!.followers.remove(currentUserUid)
+                followDTO!!.followers.remove(currentUserUid!!)
             }else{
                 //It add my follower when i don't follow a third person (팔로우 안했을 경우 팔로우 추가)
                 followDTO!!.followerCount=followDTO!!.followerCount.plus(1)
