@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.planet_demo.R
+import com.example.planet_demo.navigation.model.AlarmDTO
 import com.example.planet_demo.navigation.model.ContentDTO
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -18,10 +19,13 @@ import kotlinx.android.synthetic.main.item_comment.view.*
 
 class CommentActivity : AppCompatActivity() {
     var contentUid: String?=null
+    var destinationUid: String?=null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_comment)
         contentUid=intent.getStringExtra("contentUid")
+        destinationUid=intent.getStringExtra("destinationUid")
 
         comment_recyclerview.adapter=CommentRecyclerViewAdapter()
         comment_recyclerview.layoutManager=LinearLayoutManager(this)
@@ -29,15 +33,29 @@ class CommentActivity : AppCompatActivity() {
         comment_btn_send?.setOnClickListener {
             var comment=ContentDTO.Comment()
             comment.userId=FirebaseAuth.getInstance().currentUser?.email
-            comment.uid=FirebaseAuth.getInstance().currentUser!!.uid
+            comment.uid=FirebaseAuth.getInstance().currentUser?.uid
             comment.comment=comment_edit_message.text.toString()
             comment.timestamp=System.currentTimeMillis()
 
             FirebaseFirestore.getInstance().collection("images").document(contentUid!!).collection("comments").document().set(comment)
 
+            commentAlarm(destinationUid!!,comment_edit_message.text.toString())
+
             comment_edit_message.setText("") //메시지 보낸 후 edit_message 초기화
         }
     }
+
+    fun commentAlarm(destinationUid: String, message: String){
+        var alarmDTO=AlarmDTO()
+        alarmDTO.destinationUid=destinationUid
+        alarmDTO.userId=FirebaseAuth.getInstance().currentUser?.email
+        alarmDTO.uid=FirebaseAuth.getInstance().currentUser?.uid
+        alarmDTO.kind=1
+        alarmDTO.timestamp=System.currentTimeMillis()
+        alarmDTO.message=message
+        FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
+    }
+
     inner class CommentRecyclerViewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         var comments: ArrayList<ContentDTO.Comment> = arrayListOf() //댓글을 담을 arraylist
 

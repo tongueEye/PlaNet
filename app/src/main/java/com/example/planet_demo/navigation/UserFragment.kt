@@ -18,6 +18,7 @@ import com.example.planet_demo.LoginActivity
 import com.example.planet_demo.MainActivity
 import com.example.planet_demo.R
 import com.example.planet_demo.navigation.DetailViewFragment.DetailViewRecyclerViewAdapter.CustomViewHolder
+import com.example.planet_demo.navigation.model.AlarmDTO
 import com.example.planet_demo.navigation.model.ContentDTO
 import com.example.planet_demo.navigation.model.FollowDTO
 import com.google.firebase.auth.FirebaseAuth
@@ -157,6 +158,7 @@ class UserFragment : Fragment(){
                 followDTO= FollowDTO()
                 followDTO!!.followerCount=1
                 followDTO!!.followers[currentUserUid!!]=true
+                followerAlarm(uid!!)
 
                 transaction.set(tsDocFollower,followDTO!!)
                 return@runTransaction
@@ -170,10 +172,21 @@ class UserFragment : Fragment(){
                 //It add my follower when i don't follow a third person (팔로우 안했을 경우 팔로우 추가)
                 followDTO!!.followerCount=followDTO!!.followerCount.plus(1)
                 followDTO!!.followers[currentUserUid!!]=true
+                followerAlarm(uid!!)
             }
             transaction.set(tsDocFollower,followDTO!!)
             return@runTransaction
         }
+    }
+
+    fun followerAlarm(destinationUid: String){
+        var alarmDTO=AlarmDTO()
+        alarmDTO.destinationUid=destinationUid
+        alarmDTO.userId=auth?.currentUser?.email
+        alarmDTO.uid=auth?.currentUser?.uid
+        alarmDTO.kind=2
+        alarmDTO.timestamp=System.currentTimeMillis()
+        FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
     }
 
     //firestore database에서 프로필 이미지 받아놈
