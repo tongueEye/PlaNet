@@ -21,6 +21,7 @@ import com.example.planet_demo.navigation.DetailViewFragment.DetailViewRecyclerV
 import com.example.planet_demo.navigation.model.AlarmDTO
 import com.example.planet_demo.navigation.model.ContentDTO
 import com.example.planet_demo.navigation.model.FollowDTO
+import com.example.planet_demo.navigation.util.FcmPush
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
@@ -187,6 +188,10 @@ class UserFragment : Fragment(){
         alarmDTO.kind=2
         alarmDTO.timestamp=System.currentTimeMillis()
         FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
+
+        //팔로우 클릭시 FCM 메시지 생성
+        var message=auth?.currentUser?.email + getString(R.string.alarm_follow)
+        FcmPush.instance.sendMessage(destinationUid,"PlaNet",message)
     }
 
     //firestore database에서 프로필 이미지 받아놈

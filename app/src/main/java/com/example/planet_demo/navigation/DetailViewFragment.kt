@@ -13,6 +13,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.planet_demo.R
 import com.example.planet_demo.navigation.model.AlarmDTO
 import com.example.planet_demo.navigation.model.ContentDTO
+import com.example.planet_demo.navigation.util.FcmPush
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_detail.view.*
@@ -142,6 +143,10 @@ class DetailViewFragment : Fragment(){
             alarmDTO.kind=0
             alarmDTO.timestamp=System.currentTimeMillis()
             FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
+
+            //좋아요 클릭시 FCM 메시지 생성
+            var message= FirebaseAuth.getInstance()?.currentUser?.email + " " +getString(R.string.alarm_favorite)
+            FcmPush.instance.sendMessage(destinationUid,"PlaNet",message)
         }
 
         override fun getItemCount(): Int {

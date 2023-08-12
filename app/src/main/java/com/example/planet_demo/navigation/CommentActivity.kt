@@ -12,6 +12,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.planet_demo.R
 import com.example.planet_demo.navigation.model.AlarmDTO
 import com.example.planet_demo.navigation.model.ContentDTO
+import com.example.planet_demo.navigation.util.FcmPush
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_comment.*
@@ -54,6 +55,10 @@ class CommentActivity : AppCompatActivity() {
         alarmDTO.timestamp=System.currentTimeMillis()
         alarmDTO.message=message
         FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
+
+        //댓글 작성 시 FCM 메시지 생성
+        var msg=FirebaseAuth.getInstance().currentUser?.email + " " + getString(R.string.alarm_comment) + " of " + message
+        FcmPush.instance.sendMessage(destinationUid,"PlaNet",msg)
     }
 
     inner class CommentRecyclerViewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(){
