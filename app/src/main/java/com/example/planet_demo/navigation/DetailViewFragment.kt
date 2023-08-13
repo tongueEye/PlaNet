@@ -82,7 +82,14 @@ class DetailViewFragment : Fragment(){
             viewholder.detailviewitem_favoritecounter_textview.text="Likes"+contentDTOs!![position].favoriteCount
 
             //ProfileImage
-            Glide.with(holder.itemView.context).load(contentDTOs!![position].imageUrl).into(viewholder.detailviewitem_profile_image)
+            FirebaseFirestore.getInstance().collection("profileImages").document(contentDTOs[position].uid!!).get().addOnCompleteListener {
+                    task ->
+                if(task.isSuccessful){
+                    var url: Any? = task.result!!["image"]
+                    Glide.with(holder.itemView.context).load(url).apply(RequestOptions().circleCrop()).into(viewholder.detailviewitem_profile_image)
+                }
+            }
+            //Glide.with(holder.itemView.context).load(contentDTOs!![position].imageUrl).into(viewholder.detailviewitem_profile_image) //기존 코드
 
             //This code is when the button is clicked
             viewholder.detailviewitem_favorite_imageview.setOnClickListener {

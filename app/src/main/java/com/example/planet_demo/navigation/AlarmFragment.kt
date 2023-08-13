@@ -14,6 +14,7 @@ import com.example.planet_demo.navigation.model.AlarmDTO
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_alarm.view.*
+import kotlinx.android.synthetic.main.item_alarm.view.*
 import kotlinx.android.synthetic.main.item_comment.view.*
 
 class AlarmFragment : Fragment(){
@@ -49,7 +50,7 @@ class AlarmFragment : Fragment(){
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             //알림 리스트 디자인: 댓글 리스트 디자인 재활용
-            var view=LayoutInflater.from(parent.context).inflate(R.layout.item_comment,parent,false)
+            var view=LayoutInflater.from(parent.context).inflate(R.layout.item_alarm,parent,false)
             return CustomViewHolder(view)
         }
         inner class CustomViewHolder(view: View) : RecyclerView.ViewHolder(view)
@@ -64,25 +65,34 @@ class AlarmFragment : Fragment(){
             //알림에 프로필사진 띄우기 (profileImages collection에 들어있는 사진 중 알림 이벤트로 전달된 uid와 같은 것 출력)
             FirebaseFirestore.getInstance().collection("profileImages").document(alarmDTOList[position].uid!!).get().addOnCompleteListener { task ->
                 var url=task.result!!["image"]
-                Glide.with(view.context).load(url).apply(RequestOptions().circleCrop()).into(view.commentviewitem_imageview_profile)
+                Glide.with(view.context).load(url).apply(RequestOptions().circleCrop()).into(view.alarmviewitem_imageview_profile)
             }
 
             //알람 종류에 따라 다르게 출력
             when(alarmDTOList[position].kind){
                 0->{
                     val str_0=alarmDTOList[position].userId + " " + getString(R.string.alarm_favorite)
-                    view.commentviewitem_textview_profile.text=str_0
+                    view.alarmviewitem_textview_profile.text=str_0
                 }
                 1->{
-                    val str_0=alarmDTOList[position].userId + " " + getString(R.string.alarm_comment) + " of "+ alarmDTOList[position].message
-                    view.commentviewitem_textview_profile.text=str_0
+                    val str_0=alarmDTOList[position].userId + " " + getString(R.string.alarm_comment)
+                    var str_1="\n: "+ alarmDTOList[position].message
+
+                    //메시지 길이에 따라 출력 - 길이가 너무 길면 적당히 잘라서 이후 부분이 ... 로 보이도록 구현
+                    if (str_1.length!! > 30){
+                        str_1="\n: "+ alarmDTOList[position].message?.substring(0,30)+"..."
+                    }else{
+                        str_1="\n: "+ alarmDTOList[position].message
+                    }
+
+                    view.alarmviewitem_textview_profile.text=str_0+str_1
                 }
                 2->{
                     val str_0=alarmDTOList[position].userId + " " + getString(R.string.alarm_follow)
-                    view.commentviewitem_textview_profile.text=str_0
+                    view.alarmviewitem_textview_profile.text=str_0
                 }
             }
-            view.commentviewitem_textview_comment.visibility=View.INVISIBLE //garbage text 숨기기
+            view.alarmviewitem_textview_message.visibility=View.INVISIBLE //garbage text 숨기기
         }
 
     }
