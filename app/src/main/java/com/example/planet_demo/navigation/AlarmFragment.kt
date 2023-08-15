@@ -16,6 +16,7 @@ import com.example.planet_demo.R
 import com.example.planet_demo.navigation.model.AlarmDTO
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.fragment_alarm.view.*
 import kotlinx.android.synthetic.main.item_alarm.view.*
 
@@ -36,17 +37,22 @@ class AlarmFragment : Fragment(){
         var alarmDTOList: ArrayList<AlarmDTO> = arrayListOf()
 
         init {
-            val uid=FirebaseAuth.getInstance().currentUser?.uid //현재 로그인한 계정의 uid
+            val uid=FirebaseAuth.getInstance().currentUser?.uid //현재 로그인한 사용자의 UID를 가져옴
 
-            //FirebaseFirestore에 alarms collection에 도착한 알람의 destinationUid와 uid가 같으면
-            FirebaseFirestore.getInstance().collection("alarms").whereEqualTo("destinationUid",uid).addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-                alarmDTOList.clear()
-                if(querySnapshot==null) return@addSnapshotListener
+            FirebaseFirestore.getInstance().collection("alarms") //Firestore의 "alarms" 컬렉션을 참조
+                .whereEqualTo("destinationUid",uid) //"alarms" 컬렉션에서 "destinationUid" 필드 값이 현재 로그인한 사용자의 UID와 일치하는 문서들을 찾음
+                .orderBy("timestamp",Query.Direction.DESCENDING) // 찾은 문서들을 "timestamp" 필드 값을 기준으로 내림차순으로 정렬 - 최근 알림 우선 표시
+                .addSnapshotListener { querySnapshot, firebaseFirestoreException -> //위에서 설정한 조건으로 실시간 업데이트를 수신하면서 알림 데이터를 가져옵니다.
 
-                for (snapshot in querySnapshot.documents){ //for문을 통해 querySnapshot 순회
+                if(querySnapshot==null) return@addSnapshotListener //만약 querySnapshot이 null인 경우, 데이터가 없거나 로드에 실패한 것으로 간주하고 함수 실행을 중단
+                alarmDTOList.clear() //알림 데이터를 다시 로드하기 전에 기존의 알림 데이터 리스트를 비움
+
+                for (snapshot in querySnapshot.documents){
+                    //querySnapshot에서 가져온 문서들을 순회하며 각 문서의 데이터를 AlarmDTO 객체로 변환하여 alarmDTOList 리스트에 추가
                     alarmDTOList.add(snapshot.toObject(AlarmDTO::class.java)!!)
                 }
-                notifyDataSetChanged()
+                notifyDataSetChanged() //데이터 변경을 알려주어 리사이클러뷰가 UI를 업데이트 하도록 함
+
             }
         }
 
@@ -110,17 +116,26 @@ class AlarmFragment : Fragment(){
             var db=FirebaseFirestore.getInstance()
             var collectionReference=db.collection("alarms")
 
+            //collectionReference에 whereEqualTo("alarmId", alarm_Id)를 사용하여 해당 alarmId와 일치하는 Firestore 문서를 찾음
             collectionReference.whereEqualTo("alarmId",alarm_Id)
                 .get()
-                .addOnSuccessListener { querySnapshot ->
-                    for (documentSnapshot in querySnapshot.documents){
-                        documentSnapshot.reference.delete()
+                .addOnSuccessListener { querySnapshot -> //querySnapshot은 해당 조건을 만족하는 문서들의 스냅샷을 가지고 있음
+                    for (documentSnapshot in querySnapshot.documents){ //querySnapshot.documents는 이 스냅샷에 포함된 각 문서에 대한 목록을 제공
+                        documentSnapshot.reference.delete() //for 루프를 사용하여 각 문서를 순회하면서, 해당 문서를 삭제
                             .addOnSuccessListener {
                                 //삭제 성공 시 처리
+                                //삭제가 성공하면 해당 알림 아이템을 alarmDTOList에서 찾아서 제거하고 화면에서도 해당 아이템을 제거
+                                val rmposition = alarmDTOList.indexOfFirst { it.alarmId == alarm_Id }
+                                if (rmposition != -1) {
+                                    alarmDTOList.removeAt(position)
+                                    notifyItemRemoved(position)
+                                }
+                                notifyDataSetChanged() // 리사이클러뷰의 데이터 변경을 알려주어 화면이 업데이트된다.
                                 Toast.makeText(context, "삭제 성공했습니다!", Toast.LENGTH_SHORT).show()
                             }
                             .addOnFailureListener { exception ->
                                 //삭제 실패 시 처리
+                                //삭제 성공 또는 실패에 따라 해당 메시지를 토스트 메시지로 표시
                                 Toast.makeText(context, "삭제 실패했습니다!", Toast.LENGTH_SHORT).show()
                             }
                     }
