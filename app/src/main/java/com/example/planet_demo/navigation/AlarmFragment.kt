@@ -1,9 +1,12 @@
 package com.example.planet_demo.navigation
 
+import android.content.ContentValues.TAG
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +18,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_alarm.view.*
 import kotlinx.android.synthetic.main.item_alarm.view.*
-import kotlinx.android.synthetic.main.item_comment.view.*
 
 class AlarmFragment : Fragment(){
     override fun onCreateView(
@@ -61,6 +63,7 @@ class AlarmFragment : Fragment(){
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             var view=holder.itemView
+            var alarmDTO=alarmDTOList[position]  //새로추가
 
             //알림에 프로필사진 띄우기 (profileImages collection에 들어있는 사진 중 알림 이벤트로 전달된 uid와 같은 것 출력)
             FirebaseFirestore.getInstance().collection("profileImages").document(alarmDTOList[position].uid!!).get().addOnCompleteListener { task ->
@@ -93,6 +96,39 @@ class AlarmFragment : Fragment(){
                 }
             }
             view.alarmviewitem_textview_message.visibility=View.INVISIBLE //garbage text 숨기기
+
+            view.alarmviewitem_delete_btn.setOnClickListener {
+                val confirmDialog = ConfirmDialogFragment{
+                    deleteAlarm(position, alarmDTO.alarmId)
+                    Toast.makeText(context, alarmDTO.alarmId, Toast.LENGTH_SHORT).show()
+                }
+                confirmDialog.show(childFragmentManager,"confirm_dialog")
+            }
+        }
+
+        private fun deleteAlarm(position: Int, alarm_Id: String){
+            var db=FirebaseFirestore.getInstance()
+            var collectionReference=db.collection("alarms")
+
+            collectionReference.whereEqualTo("alarmId",alarm_Id)
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    for (documentSnapshot in querySnapshot.documents){
+                        documentSnapshot.reference.delete()
+                            .addOnSuccessListener {
+                                //삭제 성공 시 처리
+                                Toast.makeText(context, "삭제 성공했습니다!", Toast.LENGTH_SHORT).show()
+                            }
+                            .addOnFailureListener { exception ->
+                                //삭제 실패 시 처리
+                                Toast.makeText(context, "삭제 실패했습니다!", Toast.LENGTH_SHORT).show()
+                            }
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    // 조회 실패 시 처리
+                    Toast.makeText(context, "조회 실패했습니다!", Toast.LENGTH_SHORT).show()
+                }
         }
 
     }

@@ -3,12 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/drawable/dialog_delete_confirm.xml" value="0.151" />
+        <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/drawable/ic_launcher_background.xml" value="0.151" />
         <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/drawable/rounded_button_background.xml" value="0.1055" />
+        <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/drawable/rounded_button_background2.xml" value="0.151" />
+        <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/drawable/rounded_dialog_background.xml" value="0.1345" />
         <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/drawable/rounded_edittext_background.xml" value="0.1055" />
         <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/activity_add_photo.xml" value="0.22" />
         <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/activity_comment.xml" value="0.20625" />
         <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/activity_login.xml" value="0.22" />
         <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/dialog_confirm.xml" value="0.25316455696202533" />
+        <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/dialog_delete_confirm.xml" value="0.32395833333333335" />
         <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/fragment_alarm.xml" value="0.278125" />
         <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/fragment_detail.xml" value="0.27708333333333335" />
         <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/fragment_grid.xml" value="0.278125" />

@@ -1,8 +1,10 @@
 package com.example.planet_demo.navigation.model
 
 import com.google.api.Billing
+import java.util.*
 
 data class AlarmDTO(
+    var alarmId: String = UUID.randomUUID().toString(), // 고유한 UUID 값
     var destinationUid: String? = null,
     var userId: String? = null,
     var uid:String? = null,
