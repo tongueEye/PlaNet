@@ -25,6 +25,7 @@ import com.example.planet_demo.navigation.util.FcmPush
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_user.view.*
 
@@ -89,6 +90,46 @@ class UserFragment : Fragment(){
         getProfileImage()
         getFollowerAndFollowing()
         return fragmentView
+    }
+
+    inner class UserFragmentRecyclerViewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+        var contentDTOs: ArrayList<ContentDTO> = arrayListOf()
+        init {
+            firestore?.collection("images")?.whereEqualTo("uid",uid)?.orderBy("timestamp",Query.Direction.DESCENDING)?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                //Sometimes, This code return null of querySnapshot when it signout
+                if(querySnapshot==null) return@addSnapshotListener
+
+                // Clear existing data before adding new data
+                contentDTOs.clear()
+
+                //Get data
+                for (snapshot in querySnapshot.documents){
+                    contentDTOs.add(snapshot.toObject(ContentDTO::class.java)!!)
+                }
+                fragmentView?.account_tv_post_count?.text=contentDTOs.size.toString()
+                notifyDataSetChanged()
+            }
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+            var width=resources.displayMetrics.widthPixels/3
+            var imageview=ImageView(parent.context)
+            imageview.layoutParams=LinearLayoutCompat.LayoutParams(width,width)
+            return CustomViewHolder(imageview)
+        }
+        inner class CustomViewHolder(var imageview: ImageView):RecyclerView.ViewHolder(imageview){
+
+        }
+
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+            var imageview=(holder as CustomViewHolder).imageview
+            Glide.with(holder.itemView.context).load(contentDTOs[position].imageUrl).apply(RequestOptions().centerCrop()).into(imageview)
+        }
+
+        override fun getItemCount(): Int {
+            return contentDTOs.size
+        }
+
     }
 
     //팔로워 수와 팔로잉 데이터베이스에서 실시간으로 가져와서 ui 화면에 출력
@@ -205,40 +246,5 @@ class UserFragment : Fragment(){
         }
     }
 
-    inner class UserFragmentRecyclerViewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(){
-        var contentDTOs: ArrayList<ContentDTO> = arrayListOf()
-        init {
-            firestore?.collection("images")?.whereEqualTo("uid",uid)?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-                //Sometimes, This code return null of querySnapshot when it signout
-                if(querySnapshot==null) return@addSnapshotListener
 
-                //Get data
-                for (snapshot in querySnapshot.documents){
-                    contentDTOs.add(snapshot.toObject(ContentDTO::class.java)!!)
-                }
-                fragmentView?.account_tv_post_count?.text=contentDTOs.size.toString()
-                notifyDataSetChanged()
-            }
-        }
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            var width=resources.displayMetrics.widthPixels/3
-            var imageview=ImageView(parent.context)
-            imageview.layoutParams=LinearLayoutCompat.LayoutParams(width,width)
-            return CustomViewHolder(imageview)
-        }
-        inner class CustomViewHolder(var imageview: ImageView):RecyclerView.ViewHolder(imageview){
-
-        }
-
-        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-            var imageview=(holder as CustomViewHolder).imageview
-            Glide.with(holder.itemView.context).load(contentDTOs[position].imageUrl).apply(RequestOptions().centerCrop()).into(imageview)
-        }
-
-        override fun getItemCount(): Int {
-            return contentDTOs.size
-        }
-
-    }
 }

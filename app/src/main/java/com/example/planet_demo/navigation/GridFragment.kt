@@ -14,6 +14,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.planet_demo.R
 import com.example.planet_demo.navigation.model.ContentDTO
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.fragment_grid.view.* //user fragment의 recycler view 코드 재사용 - fragment_user를 fragment_grid로 수정
 
 class GridFragment : Fragment(){
@@ -38,9 +39,12 @@ class GridFragment : Fragment(){
     inner class UserFragmentRecyclerViewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(){
         var contentDTOs: ArrayList<ContentDTO> = arrayListOf()
         init {
-            firestore?.collection("images")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+            firestore?.collection("images")?.orderBy("timestamp",Query.Direction.DESCENDING)?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                 //Sometimes, This code return null of querySnapshot when it signout
                 if(querySnapshot==null) return@addSnapshotListener
+
+                // Clear existing data before adding new data
+                contentDTOs.clear()
 
                 //Get data
                 for (snapshot in querySnapshot.documents){

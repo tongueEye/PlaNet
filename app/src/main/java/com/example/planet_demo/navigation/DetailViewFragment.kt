@@ -16,6 +16,7 @@ import com.example.planet_demo.navigation.model.ContentDTO
 import com.example.planet_demo.navigation.util.FcmPush
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.fragment_detail.view.*
 import kotlinx.android.synthetic.main.item_comment.view.*
 import kotlinx.android.synthetic.main.item_detail.view.*
@@ -43,7 +44,7 @@ class DetailViewFragment : Fragment(){
         var contentUidList: ArrayList<String> = arrayListOf()
 
         init {
-            firestore?.collection("images")?.orderBy("timestamp")?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+            firestore?.collection("images")?.orderBy("timestamp",Query.Direction.DESCENDING)?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
                 contentDTOs.clear()
                 contentUidList.clear()
 
