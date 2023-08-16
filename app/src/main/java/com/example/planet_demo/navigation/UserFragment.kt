@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -124,6 +125,25 @@ class UserFragment : Fragment(){
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             var imageview=(holder as CustomViewHolder).imageview
             Glide.with(holder.itemView.context).load(contentDTOs[position].imageUrl).apply(RequestOptions().centerCrop()).into(imageview)
+
+            holder.itemView.setOnClickListener {
+                val clickedItem=contentDTOs[position]
+                val content_id=clickedItem.contentId
+                showDetail(content_id)
+            }
+        }
+
+        // 선택한 아이템의 uid에 해당하는 데이터를 가져와서 아이템 상세화면을 표시하는 함수
+        private fun showDetail(cid: String) {
+            val detailFragment = ItemDetailFragment()
+            val bundle = Bundle()
+            bundle.putString("cid", cid)
+            detailFragment.arguments = bundle
+
+            val transaction = activity?.supportFragmentManager?.beginTransaction()
+            transaction?.replace(R.id.main_content, detailFragment)
+            transaction?.addToBackStack(null)
+            transaction?.commit()
         }
 
         override fun getItemCount(): Int {
