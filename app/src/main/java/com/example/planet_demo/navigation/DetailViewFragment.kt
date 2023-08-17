@@ -137,7 +137,11 @@ class DetailViewFragment : Fragment(){
                 }else{ //좋아요가 눌려있지 않은 경우 - 좋아요 클릭
                     contentDTO?.favoriteCount= contentDTO?.favoriteCount?.plus(1)!!
                     contentDTO?.favorites?.set(uid!!, true)
-                    favoriteAlarm(contentDTOs[position].uid!!)
+
+                    // 좋아요 클릭시에만 알람을 발생시키도록 처리
+                    if (contentDTO.uid != uid) { // 내 게시물에 대한 좋아요가 아닐 경우에만 알람 발생
+                        favoriteAlarm(contentDTO.uid!!)
+                    }
                 }
                 transaction.set(tsDoc,contentDTO)
             }

@@ -68,6 +68,24 @@ class GridFragment : Fragment(){
             var imageview=(holder as CustomViewHolder).imageview
             Glide.with(holder.itemView.context).load(contentDTOs[position].imageUrl).apply(
                 RequestOptions().centerCrop()).into(imageview)
+
+
+            // 각 아이템을 클릭할 때의 동작 설정
+            holder.itemView.setOnClickListener {
+                val contentDTO = contentDTOs[position]
+                val bundle = Bundle()
+                bundle.putString("cid", contentDTO.contentId) // contentId를 인텐트로 전달
+
+                val itemDetailFragment = ItemDetailFragment()
+                itemDetailFragment.arguments = bundle
+
+                activity?.supportFragmentManager
+                    ?.beginTransaction()
+                    ?.replace(R.id.main_content, itemDetailFragment)
+                    ?.addToBackStack(null) // 뒤로가기 스택에 추가
+                    ?.commit()
+            }
+
         }
 
         override fun getItemCount(): Int {

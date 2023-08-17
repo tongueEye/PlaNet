@@ -47,18 +47,39 @@ class CommentActivity : AppCompatActivity() {
     }
 
     fun commentAlarm(destinationUid: String, message: String){
-        var alarmDTO=AlarmDTO()
-        alarmDTO.destinationUid=destinationUid
-        alarmDTO.userId=FirebaseAuth.getInstance().currentUser?.email
-        alarmDTO.uid=FirebaseAuth.getInstance().currentUser?.uid
-        alarmDTO.kind=1
-        alarmDTO.timestamp=System.currentTimeMillis()
-        alarmDTO.message=message
-        FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
 
-        //댓글 작성 시 FCM 메시지 생성
-        var msg=FirebaseAuth.getInstance().currentUser?.email + " " + getString(R.string.alarm_comment) + " of " + message
-        FcmPush.instance.sendMessage(destinationUid,"PlaNet",msg)
+        val docRef = contentUid?.let {
+            // contentUid가 null이 아닌 경우에 코드 블록 안의 내용을 실행
+
+            //contentUid를 이용하여 Firebase Firestore의 "images" 컬렉션에서 특정 contentUid를 가진 문서를 가져오는 작업을 수행
+            FirebaseFirestore.getInstance()
+                .collection("images")
+                .document(it)
+                .get()
+                .addOnCompleteListener { task -> //문서 가져오기 작업이 완료되면 이 리스너가 호출, task는 작업 결과를 나타내는 객체
+                    if (task.isSuccessful) { //task가 성공적으로 완료되었다면 해당 블록 내부의 코드를 실행
+                        val content = task.result?.toObject(ContentDTO::class.java) //문서에서 가져온 데이터를 ContentDTO 클래스로 변환하여 content 변수에 저장, 이 데이터에는 게시물 작성자의 식별자인 uid가 포함되어 있음.
+                        val destinationUid = content?.uid //content 객체에서 작성자의 식별자인 uid를 가져와 destinationUid 변수에 저장
+
+                        //만약 작성자의 uid가 현재 로그인한 사용자의 uid와 다르다면, 즉 댓글을 단 사용자가 게시물 작성자가 아니라면, 아래 내용을 실행
+                        if (destinationUid != FirebaseAuth.getInstance().currentUser?.uid) {
+                            //댓글을 단 사용자가 게시물 작성자가 아닌 경우, 알람 데이터 alarmDTO를 생성하고 Firebase Firestore의 "alarms" 컬렉션에 추가
+                            val alarmDTO = AlarmDTO()
+                            alarmDTO.destinationUid = destinationUid
+                            alarmDTO.userId = FirebaseAuth.getInstance().currentUser?.email
+                            alarmDTO.uid = FirebaseAuth.getInstance().currentUser?.uid
+                            alarmDTO.kind = 1
+                            alarmDTO.timestamp = System.currentTimeMillis()
+                            alarmDTO.message = message
+                            FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
+
+                            // 또한 FCM 메시지를 생성하여 게시물 작성자에게 보내는 FcmPush 객체를 이용하여 전송
+                            val msg = FirebaseAuth.getInstance().currentUser?.email + " " + getString(R.string.alarm_comment) + " : " + message
+                            FcmPush.instance.sendMessage(destinationUid!!, "PlaNet", msg)
+                        }
+                    }
+                }
+        }
     }
 
     inner class CommentRecyclerViewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(){

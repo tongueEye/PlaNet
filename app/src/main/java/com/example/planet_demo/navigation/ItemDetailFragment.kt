@@ -12,7 +12,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.planet_demo.R
+import com.example.planet_demo.navigation.model.AlarmDTO
 import com.example.planet_demo.navigation.model.ContentDTO
+import com.example.planet_demo.navigation.util.FcmPush
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_detail.view.*
 import kotlinx.android.synthetic.main.item_detail.view.*
@@ -41,7 +44,6 @@ class ItemDetailFragment : Fragment() {
         }
         return view
     }
-
 
     private fun showDetailInfo(view: View, contentDTO: ContentDTO) {
 
@@ -103,6 +105,82 @@ class ItemDetailFragment : Fragment() {
                 }
         }
 
+        setupFavoriteButton(contentDTO,view)
+
+    }
+
+    private fun setupFavoriteButton(contentDTO: ContentDTO, view: View) {
+        val favoriteImageView = view.detailviewitem_favorite_imageview
+
+        if (contentDTO.favorites.containsKey(FirebaseAuth.getInstance().currentUser?.uid)) {
+            // This is like status
+            favoriteImageView.setImageResource(R.drawable.ic_favorite)
+        } else {
+            // This is unlike status
+            favoriteImageView.setImageResource(R.drawable.ic_favorite_border)
+        }
+
+        favoriteImageView.setOnClickListener {
+            Toast.makeText(context, "좋아요 클릭!!", Toast.LENGTH_SHORT).show()
+            favoriteEvent(contentDTO, view)
+        }
+    }
+
+    private fun favoriteEvent(contentDTO: ContentDTO, view: View) {
+        Toast.makeText(context, contentDTO.contentId, Toast.LENGTH_SHORT).show()
+
+        firestore?.collection("images")?.whereEqualTo("contentId", contentDTO.contentId)?.get()
+            ?.addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    val documentSnapshot = querySnapshot.documents[0] // 매칭되는 "contentId"가 있는 경우 가정
+                    val tsDoc = documentSnapshot.reference
+
+                    firestore?.runTransaction { transaction ->
+                        val uid = FirebaseAuth.getInstance().currentUser?.uid
+                        val updatedContentDTO = transaction.get(tsDoc).toObject(ContentDTO::class.java)
+
+                        if (updatedContentDTO?.favorites?.containsKey(uid) == true) {
+                            updatedContentDTO.favoriteCount = updatedContentDTO.favoriteCount - 1
+                            updatedContentDTO.favorites.remove(uid)
+                        } else {
+                            updatedContentDTO?.favoriteCount = updatedContentDTO?.favoriteCount?.plus(1)!!
+                            updatedContentDTO.favorites[uid!!] = true
+                            updatedContentDTO.uid?.let {
+                                if (contentDTO.uid != uid) { // 내 게시물에 대한 좋아요가 아닐 경우에만 알람 발생
+                                    favoriteAlarm(it)
+                                }
+                                //favoriteAlarm(it)
+                            }
+                        }
+                        transaction.set(tsDoc, updatedContentDTO)
+
+                        // 트랜잭션이 성공한 후 UI 업데이트
+                        updatedContentDTO
+                    }?.addOnSuccessListener { updatedContentDTO ->
+                        // Firestore 트랜잭션이 성공한 후에 UI를 업데이트합니다.
+                        setupFavoriteButton(updatedContentDTO, view)
+                        updateLikeCount(updatedContentDTO, view)
+                    }
+                }
+            }
+    }
+
+    fun updateLikeCount(contentDTO: ContentDTO, view: View) {
+        view.detailviewitem_favoritecounter_textview.text = "Likes ${contentDTO.favoriteCount}"
+    }
+
+    fun favoriteAlarm(destinationUid: String){
+        var alarmDTO= AlarmDTO()
+        alarmDTO.destinationUid=destinationUid
+        alarmDTO.userId=FirebaseAuth.getInstance().currentUser?.email
+        alarmDTO.uid=FirebaseAuth.getInstance().currentUser?.uid
+        alarmDTO.kind=0
+        alarmDTO.timestamp=System.currentTimeMillis()
+        FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
+
+        //좋아요 클릭시 FCM 메시지 생성
+        var message= FirebaseAuth.getInstance()?.currentUser?.email + " " +getString(R.string.alarm_favorite)
+        FcmPush.instance.sendMessage(destinationUid,"PlaNet",message)
     }
 
 
