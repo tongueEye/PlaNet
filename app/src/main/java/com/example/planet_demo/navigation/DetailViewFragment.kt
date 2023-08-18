@@ -82,6 +82,9 @@ class DetailViewFragment : Fragment(){
             //likes
             viewholder.detailviewitem_favoritecounter_textview.text="Likes"+contentDTOs!![position].favoriteCount
 
+            //menu icon
+            viewholder.detailviewitem_menu_image.visibility=View.GONE
+
             //ProfileImage
             FirebaseFirestore.getInstance().collection("profileImages").document(contentDTOs[position].uid!!).get().addOnCompleteListener {
                     task ->

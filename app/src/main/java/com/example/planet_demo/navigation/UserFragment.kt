@@ -200,7 +200,7 @@ class UserFragment : Fragment(){
                 return@runTransaction
             }
 
-            if (followDTO.followings.containsKey(uid)){
+            if (followDTO?.followings?.containsKey(uid)!!){
                 //It remove following third person when a third person follow me
                 followDTO?.followingCount= followDTO?.followingCount?.minus(1)!!
                 followDTO?.followings?.remove(uid)
@@ -213,7 +213,7 @@ class UserFragment : Fragment(){
             return@runTransaction
         }
         //Save data to third Person
-        var tsDocFollower=firestore?.collection("users")?.document(uid!!)
+        var tsDocFollower=firestore!!.collection("users")?.document(uid!!)
         firestore?.runTransaction { transaction->
             var followDTO=transaction.get(tsDocFollower!!).toObject(FollowDTO::class.java)
             if(followDTO==null){

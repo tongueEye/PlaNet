@@ -6,11 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.planet_demo.AddPhotoActivity
 import com.example.planet_demo.R
 import com.example.planet_demo.navigation.model.AlarmDTO
 import com.example.planet_demo.navigation.model.ContentDTO
@@ -23,6 +25,7 @@ import kotlinx.android.synthetic.main.item_detail.view.*
 class ItemDetailFragment : Fragment() {
     private var firestore: FirebaseFirestore? = null
     var content_id: String?=null
+    var currentUserUid: String? = null // 추가: 현재 사용자의 UID를 저장할 변수
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,6 +35,7 @@ class ItemDetailFragment : Fragment() {
         var view=LayoutInflater.from(activity).inflate(R.layout.item_detail,container,false)
         firestore = FirebaseFirestore.getInstance()
         content_id = arguments?.getString("cid")
+        currentUserUid = FirebaseAuth.getInstance().currentUser?.uid // 현재 사용자의 UID 가져오기
 
         if (content_id != null) {
             firestore?.collection("images")?.whereEqualTo("contentId", content_id)?.get()?.addOnSuccessListener { querySnapshot ->
@@ -44,6 +48,85 @@ class ItemDetailFragment : Fragment() {
         }
         return view
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // detailviewitem_menu_image 클릭 시 팝업 메뉴 표시
+        view.detailviewitem_menu_image.setOnClickListener {
+            showPopupMenu(it)
+        }
+    }
+
+    private fun showPopupMenu(view: View) {
+        val popupMenu = PopupMenu(requireContext(), view)
+        val inflater = popupMenu.menuInflater
+        inflater.inflate(R.menu.popup_menu_item, popupMenu.menu)
+        popupMenu.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.menu_edit_option -> {
+                    // 글 수정 옵션을 클릭했을 때의 동작 처리
+                    Toast.makeText(requireContext(), "수정 버튼 클릭", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "수정 할 글: "+content_id, Toast.LENGTH_SHORT).show()
+                    val editIntent = Intent(requireContext(), AddPhotoActivity::class.java)
+                    editIntent.putExtra("edit_mode", true) // 수정 모드로 전달
+                    editIntent.putExtra("content_id", content_id) // 수정할 글의 content_id 전달
+                    startActivity(editIntent)
+
+                    true
+                }
+                R.id.menu_delete_option -> {
+                    // 글 삭제 옵션을 클릭했을 때의 동작 처리
+                    Toast.makeText(requireContext(), "삭제 버튼 클릭", Toast.LENGTH_SHORT).show()
+                    showDeleteConfirmDialog()
+                    true
+                }
+                else -> false
+            }
+        }
+        popupMenu.show()
+    }
+
+    private fun showDeleteConfirmDialog() {
+        val confirmDialogFragment = ConfirmDialogFragment {
+            // 확인 버튼 클릭 시 동작 처리
+            deleteContent()
+        }
+        confirmDialogFragment.show(requireFragmentManager(), "DeleteConfirmDialog")
+    }
+
+    // 글 삭제 로직
+    private fun deleteContent() {
+        if (content_id != null) {
+            firestore?.collection("images")?.whereEqualTo("contentId", content_id!!)
+                ?.get()
+                ?.addOnSuccessListener { querySnapshot ->
+                    if (!querySnapshot.isEmpty) {
+                        val documentSnapshot = querySnapshot.documents[0]
+                        documentSnapshot.reference.delete()
+                            .addOnSuccessListener {
+                                // 글 삭제 성공 시 처리
+                                Toast.makeText(requireContext(), "글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+
+                                // 이전 화면으로 이동하며 갱신
+                                requireActivity().onBackPressed()
+                            }
+                            .addOnFailureListener { e ->
+                                // 글 삭제 실패 시 처리
+                                Toast.makeText(requireContext(), "글 삭제에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                            }
+                    } else {
+                        // 매칭되는 "contentId"를 가진 문서가 없을 경우 처리
+                        Toast.makeText(requireContext(), "해당 글을 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                ?.addOnFailureListener { e ->
+                    // 조회 실패 시 처리
+                    Toast.makeText(requireContext(), "글 조회에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+        }
+    }
+
 
     private fun showDetailInfo(view: View, contentDTO: ContentDTO) {
 
@@ -70,6 +153,12 @@ class ItemDetailFragment : Fragment() {
             .apply(RequestOptions().centerCrop())
             .into(view.detailviewitem_imageview_content)
 
+        // detailviewitem_menu_image 이미지 뷰의 표시 여부 결정
+        if (currentUserUid == contentDTO.uid) {
+            view.detailviewitem_menu_image.visibility = View.VISIBLE
+        } else {
+            view.detailviewitem_menu_image.visibility = View.GONE
+        }
 
         //This code is when the profile image
         view.detailviewitem_profile_image.setOnClickListener {
@@ -108,6 +197,8 @@ class ItemDetailFragment : Fragment() {
         setupFavoriteButton(contentDTO,view)
 
     }
+
+
 
     private fun setupFavoriteButton(contentDTO: ContentDTO, view: View) {
         val favoriteImageView = view.detailviewitem_favorite_imageview
@@ -149,7 +240,6 @@ class ItemDetailFragment : Fragment() {
                                 if (contentDTO.uid != uid) { // 내 게시물에 대한 좋아요가 아닐 경우에만 알람 발생
                                     favoriteAlarm(it)
                                 }
-                                //favoriteAlarm(it)
                             }
                         }
                         transaction.set(tsDoc, updatedContentDTO)

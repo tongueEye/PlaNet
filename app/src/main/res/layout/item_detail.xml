@@ -18,6 +18,13 @@
             android:id="@+id/detailviewitem_profile_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
+        <ImageView
+            android:id="@+id/detailviewitem_menu_image"
+            android:src="@drawable/ic_menu"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="160dp"
+            />
     </LinearLayout>
     <ImageView
         android:id="@+id/detailviewitem_imageview_content"
