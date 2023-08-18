@@ -48,7 +48,6 @@ class AddPhotoActivity : AppCompatActivity() {
         addphoto_btn_upload.setOnClickListener {
             if (editMode) {
                 val contentId = intent.getStringExtra("content_id")
-                loadContentForEditing(contentId)
 
                 // 수정 모드일 경우 업데이트 로직 실행
                 val newExplain = addphoto_edit_explain.text.toString()
@@ -59,35 +58,7 @@ class AddPhotoActivity : AppCompatActivity() {
                 // 새로운 글을 작성하는 모드
                 contentUpload()
             }
-            //contentUpload()
         }
-    }
-
-    private fun loadContentForEditing(contentId: String?) {
-        firestore?.collection("images")?.whereEqualTo("contentId", contentId)
-            ?.get()
-            ?.addOnSuccessListener { querySnapshot ->
-                if (!querySnapshot.isEmpty) {
-                    val documentSnapshot = querySnapshot.documents[0]
-                    val contentDTO = documentSnapshot.toObject(ContentDTO::class.java)
-
-                    if (contentDTO != null) {
-                        // 이미지 로딩 및 설명 업데이트
-                        Glide.with(this)
-                            .load(contentDTO.imageUrl)
-                            .into(addphoto_image)
-
-                        addphoto_edit_explain.setText(contentDTO.explain)
-                    }
-                } else {
-                    // 매칭되는 "contentId"를 가진 문서가 없을 경우 처리
-                    Toast.makeText(this, "해당 글을 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
-                }
-            }
-            ?.addOnFailureListener { exception ->
-                // 실패 시 처리하는 코드
-                Toast.makeText(this, "글 정보를 불러오는데 실패했습니다.", Toast.LENGTH_SHORT).show()
-            }
     }
 
     // 수정 버튼 클릭 시 호출되는 함수

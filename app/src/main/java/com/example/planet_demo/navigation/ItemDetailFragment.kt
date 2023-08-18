@@ -73,6 +73,8 @@ class ItemDetailFragment : Fragment() {
                     editIntent.putExtra("content_id", content_id) // 수정할 글의 content_id 전달
                     startActivity(editIntent)
 
+                    requireActivity().onBackPressed()
+
                     true
                 }
                 R.id.menu_delete_option -> {
