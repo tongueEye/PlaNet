@@ -21,6 +21,10 @@
             android:name=".navigation.CommentActivity"
             android:exported="false" />
         <activity
+            android:name=".navigation.EditCommentActivity"
+            android:label="Edit Comment"
+            android:theme="@style/AppTheme" />
+        <activity
             android:name=".AddPhotoActivity"
             android:exported="false" />
         <activity

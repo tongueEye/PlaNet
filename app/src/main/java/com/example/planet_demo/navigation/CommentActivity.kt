@@ -1,10 +1,13 @@
 package com.example.planet_demo.navigation
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -38,7 +41,10 @@ class CommentActivity : AppCompatActivity() {
             comment.comment=comment_edit_message.text.toString()
             comment.timestamp=System.currentTimeMillis()
 
-            FirebaseFirestore.getInstance().collection("images").document(contentUid!!).collection("comments").document().set(comment)
+            FirebaseFirestore.getInstance()
+                .collection("images")
+                .document(contentUid!!)
+                .collection("comments").document().set(comment)
 
             commentAlarm(destinationUid!!,comment_edit_message.text.toString())
 
@@ -125,6 +131,74 @@ class CommentActivity : AppCompatActivity() {
             view.commentviewitem_textview_comment.text=comments[position].comment
             view.commentviewitem_textview_profile.text=comments[position].userId
 
+            // 댓글 작성자의 uid와 현재 사용자의 uid를 비교하여 같은지 확인
+            val isCommentAuthor = comments[position].uid == FirebaseAuth.getInstance().currentUser?.uid
+
+            // contentUid 변수에서 게시물 작성자의 uid를 가져옴
+            val postAuthorUid = destinationUid
+
+            if (isCommentAuthor || postAuthorUid == FirebaseAuth.getInstance().currentUser?.uid) {
+                // 사용자가 댓글 작성자 또는 게시물 작성자인 경우, 옵션 버튼을 보이도록 설정
+                view.commentviewitem_option_btn.visibility = View.VISIBLE
+
+                // 옵션 버튼 클릭 시 팝업 메뉴가 나타나도록 설정
+                view.commentviewitem_option_btn.setOnClickListener {
+                    val popupMenu = PopupMenu(it.context, it)
+                    if (isCommentAuthor) {
+                        popupMenu.inflate(R.menu.popup_menu_item) // 댓글 작성자용 메뉴
+                    } else {
+                        popupMenu.inflate(R.menu.popup_menu_item2) // 글 작성자용 메뉴
+                    }
+                    popupMenu.setOnMenuItemClickListener { menuItem ->
+                        when (menuItem.itemId) {
+                            R.id.menu_edit_option -> {
+                                // "수정" 메뉴 클릭 시 수행할 동작 구현
+                                // 예: 댓글 수정 화면으로 이동
+                                val commentId = comments[position].commentId // 수정할 댓글의 고유 ID
+                                val comment = comments[position].comment // 기존 댓글 내용
+                                val userId=comments[position].userId // 유저 아이디
+                                val uid = comments[position].uid.toString() // 사용자의 uid 가져오기
+
+                                val profileImageRef = FirebaseFirestore.getInstance()
+                                    .collection("profileImages")
+                                    .document(uid)
+
+                                profileImageRef.get().addOnSuccessListener { documentSnapshot ->
+                                    if (documentSnapshot.exists()) {
+                                        val imageUrl = documentSnapshot.getString("image")
+                                        // imageUrl을 사용하여 작업 수행
+                                        if (comment != null) {
+                                            navigateToEditComment(commentId, comment, imageUrl, userId)
+                                        }
+                                    } else {
+                                        // 문서가 없을 경우의 처리
+                                        Toast.makeText(baseContext,"문서가 존재하지 않습니다.",Toast.LENGTH_LONG)
+                                    }
+                                }.addOnFailureListener { exception ->
+                                    // 데이터 가져오기 실패 시의 처리
+                                    Toast.makeText(baseContext,"데이터를 가져오는 데 실패했습니다.",Toast.LENGTH_LONG)
+                                }
+
+                                true
+                            }
+                            R.id.menu_delete_option -> {
+                                // "삭제" 메뉴 클릭 시 수행할 동작 구현
+                                // 예: 댓글 삭제 요청
+                                val commentId = comments[position].commentId // 댓글의 고유 ID
+                                showDeleteConfirmationDialog(commentId) // 확인 대화상자 표시
+                                true
+                            }
+                            else -> false
+                        }
+                    }
+                    popupMenu.show()
+                }
+
+            } else {
+                // 그 외의 경우에는 옵션 버튼을 숨김 처리
+                view.commentviewitem_option_btn.visibility = View.GONE
+            }
+
             FirebaseFirestore.getInstance()
                 .collection("profileImages")
                 .document(comments[position].uid!!)
@@ -136,5 +210,48 @@ class CommentActivity : AppCompatActivity() {
                 }
             }
         }
+
+        // 댓글 수정 화면으로 이동하는 메소드
+        private fun navigateToEditComment(commentId: String, comment: String, imageUrl: String?, userId: String?) {
+            val intent = Intent(this@CommentActivity, EditCommentActivity::class.java)
+            intent.putExtra("contentUid",contentUid)
+            intent.putExtra("commentId", commentId) // 수정할 댓글의 고유 ID 전달
+            intent.putExtra("comment", comment) // 기존 댓글 내용 전달
+            intent.putExtra("profileImage", imageUrl) // 프로필 이미지 URL 전달
+            intent.putExtra("userId", userId) // 사용자 ID 전달
+            startActivity(intent)
+        }
+
+        // "삭제" 메뉴를 선택했을 때 띄우는 확인 대화상자 표시 메소드
+        private fun showDeleteConfirmationDialog(commentId: String) {
+            val confirmDialog = ConfirmDialogFragment {
+                // 확인 버튼이 클릭되었을 때 수행할 동작
+                deleteComment(commentId) // 댓글 삭제 요청
+            }
+            confirmDialog.show(supportFragmentManager, "confirm_dialog")
+        }
+
+        // 댓글 삭제 요청 및 Firestore에서 삭제하는 메소드
+        private fun deleteComment(commentId: String) {
+            // "images" 컬렉션에서 "contentId" 필드 값이 현재 contentUid와 같은 문서 찾기
+            FirebaseFirestore.getInstance()
+                .collection("images")
+                .document(contentUid!!)
+                .collection("comments")
+                .whereEqualTo("commentId",commentId)
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    for (commentDocument in querySnapshot) {
+                        commentDocument.reference.delete()
+                            .addOnSuccessListener {
+                                Toast.makeText(baseContext, "댓글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(baseContext, "댓글 삭제에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                            }
+                    }
+                }
+        }
+
     }
 }

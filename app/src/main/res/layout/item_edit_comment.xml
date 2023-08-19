@@ -24,14 +24,14 @@
         app:layout_constraintTop_toTopOf="@+id/commentviewitem_imageview_profile"
         android:layout_marginStart="8dp"/>
 
-    <TextView
-        android:id="@+id/commentviewitem_textview_comment"
+    <EditText
+        android:id="@+id/commentviewitem_edittext_comment"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="2dp"
         android:layout_marginBottom="8dp"
-        android:text="Message"
+        android:hint="Enter your message here"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/vertical_guideline"
         app:layout_constraintStart_toEndOf="@+id/commentviewitem_imageview_profile"
@@ -46,9 +46,9 @@
 
     <ImageView
         android:id="@+id/commentviewitem_option_btn"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:src="@drawable/ic_delete"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_ok"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/vertical_guideline"
@@ -63,7 +63,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/commentviewitem_textview_comment"
+        app:layout_constraintTop_toBottomOf="@id/commentviewitem_edittext_comment"
         app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

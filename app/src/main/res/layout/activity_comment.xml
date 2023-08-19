@@ -26,27 +26,35 @@
         android:background="@color/colorDivision"
         android:layout_width="match_parent"
         android:layout_height="1dp"></LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/comment_recyclerview"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="30dp"
+        android:layout_above="@+id/comment_input_layout"
         android:layout_below="@id/toolbar_division"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
-    <Button
-        android:id="@+id/comment_btn_send"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/comment_recyclerview"
-        android:layout_margin="10dp"
-        android:text="@string/send"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <EditText
-        android:id="@+id/comment_edit_message"
-        android:layout_toLeftOf="@+id/comment_btn_send"
-        android:layout_below="@id/comment_recyclerview"
-        android:layout_margin="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
+    <LinearLayout
+        android:id="@+id/comment_input_layout"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/comment_edit_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="10dp"/>
+
+        <Button
+            android:id="@+id/comment_btn_send"
+            android:text="@string/send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"/>
+    </LinearLayout>
 </RelativeLayout>
