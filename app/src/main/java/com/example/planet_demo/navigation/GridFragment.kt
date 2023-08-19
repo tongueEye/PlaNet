@@ -20,19 +20,53 @@ import kotlinx.android.synthetic.main.fragment_grid.view.* //user fragment의 re
 class GridFragment : Fragment(){
     var firestore: FirebaseFirestore?=null //user fragment의 recycler view 코드 재사용 - 변수 글로벌 변수로 선언
     var fragmentView:View?=null //user fragment의 recycler view 코드 재사용 - 변수 글로벌 변수로 선언
+    private lateinit var adapter: UserFragmentRecyclerViewAdapter // 어댑터를 미리 선언
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        fragmentView=LayoutInflater.from(activity).inflate(R.layout.fragment_grid,container,false) //user fragment의 recycler view 코드 재사용 - fragmentView 초기화
+        fragmentView = inflater.inflate(R.layout.fragment_grid, container, false)
+        //fragmentView=LayoutInflater.from(activity).inflate(R.layout.fragment_grid,container,false) //user fragment의 recycler view 코드 재사용 - fragmentView 초기화
         firestore=FirebaseFirestore.getInstance() //user fragment의 recycler view 코드 재사용 - firebase 초기화
 
+        // 어댑터 초기화 및 리사이클러뷰에 설정
+        adapter = UserFragmentRecyclerViewAdapter()
+        fragmentView?.gridfragment_recyclerview?.adapter = adapter
         //recyclerview 연결
-        fragmentView?.gridfragment_recyclerview?.adapter=UserFragmentRecyclerViewAdapter()
+        //fragmentView?.gridfragment_recyclerview?.adapter=UserFragmentRecyclerViewAdapter()
         fragmentView?.gridfragment_recyclerview?.layoutManager=GridLayoutManager(activity,3)
+
+        val searchButton = fragmentView?.findViewById<ImageView>(R.id.search_button)
+        searchButton?.setOnClickListener {
+            val searchText = fragmentView?.search_edittext?.text.toString()
+            filterContentsBySearch(searchText)
+        }
+
         return fragmentView
+    }
+
+    private fun filterContentsBySearch(searchText: String) {
+        firestore?.collection("images")
+            ?.orderBy("timestamp", Query.Direction.DESCENDING)
+            ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                if (querySnapshot == null) return@addSnapshotListener
+
+                val filteredContentDTOs = mutableListOf<ContentDTO>()
+
+                for (snapshot in querySnapshot.documents) {
+                    val contentDTO = snapshot.toObject(ContentDTO::class.java)
+                    contentDTO?.let {
+                        if (it.explain?.contains(searchText, ignoreCase = true) == true) {
+                            filteredContentDTOs.add(it)
+                        }
+                    }
+                }
+
+                adapter.updateData(filteredContentDTOs)
+            }
     }
 
     //user fragment의 recycler view 코드 재사용 (일부 변경)
@@ -52,6 +86,13 @@ class GridFragment : Fragment(){
                 }
                 notifyDataSetChanged()
             }
+        }
+
+        // 어댑터 데이터 업데이트 함수
+        fun updateData(newData: List<ContentDTO>) {
+            contentDTOs.clear()
+            contentDTOs.addAll(newData)
+            notifyDataSetChanged()
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
