@@ -188,7 +188,7 @@ class UserFragment : Fragment(){
             if(followDTO==null){
                 followDTO= FollowDTO()
                 followDTO!!.followingCount=1
-                followDTO!!.followers[uid!!]=true
+                followDTO!!.followings[uid!!]=true
 
                 transaction.set(tsDocFollowing,followDTO)
                 return@runTransaction

@@ -36,6 +36,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".SetInfoActivity"
+            android:label="Set Info" />
         <activity android:name=".MainActivity" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
