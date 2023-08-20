@@ -82,13 +82,7 @@ class UserFragment : Fragment(){
         fragmentView?.account_recyclerview?.adapter=UserFragmentRecyclerViewAdapter()
         fragmentView?.account_recyclerview?.layoutManager=GridLayoutManager(activity,3)
 
-        //프로필 업로드
-        fragmentView?.account_iv_profile?.setOnClickListener {
-            var photoPickerIntent=Intent(Intent.ACTION_PICK)
-            photoPickerIntent.type="image/*"
-            activity?.startActivityForResult(photoPickerIntent,PICK_PROFILE_FROM_ALBUM)
-        }
-        getProfileImage()
+        getProfileImage() //프로필 업로드
         getFollowerAndFollowing()
         return fragmentView
     }
@@ -257,12 +251,28 @@ class UserFragment : Fragment(){
 
     //firestore database에서 프로필 이미지 받아놈
     fun getProfileImage(){
-        firestore?.collection("profileImages")?.document(uid!!)?.addSnapshotListener{documentSnapshot, firebaseFirestoreException ->
-            if(documentSnapshot==null) return@addSnapshotListener
-            if(documentSnapshot.data!=null){
-                var url=documentSnapshot?.data!!["image"]
+        // Check if the current user is viewing their own profile
+        val isCurrentUserProfile = uid == currentUserUid
+
+        // Load the profile image for the current user
+        firestore?.collection("profileImages")?.document(uid!!)?.addSnapshotListener { documentSnapshot, firebaseFirestoreException ->
+            if (documentSnapshot == null) return@addSnapshotListener
+            if (documentSnapshot.data != null) {
+                val url = documentSnapshot.data!!["image"]
                 Glide.with(requireActivity()).load(url).apply(RequestOptions().circleCrop()).into(fragmentView?.account_iv_profile!!)
             }
+        }
+
+        if (isCurrentUserProfile) {
+            // Allow changing profile image only for the current user
+            fragmentView?.account_iv_profile?.setOnClickListener {
+                var photoPickerIntent = Intent(Intent.ACTION_PICK)
+                photoPickerIntent.type = "image/*"
+                activity?.startActivityForResult(photoPickerIntent, PICK_PROFILE_FROM_ALBUM)
+            }
+        } else {
+            // Disable profile image click for other users
+            fragmentView?.account_iv_profile?.setOnClickListener(null)
         }
     }
 

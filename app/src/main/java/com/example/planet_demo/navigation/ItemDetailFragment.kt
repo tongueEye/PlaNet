@@ -19,6 +19,7 @@ import com.example.planet_demo.navigation.model.ContentDTO
 import com.example.planet_demo.navigation.util.FcmPush
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_detail.view.*
 import kotlinx.android.synthetic.main.item_detail.view.*
 
@@ -105,30 +106,36 @@ class ItemDetailFragment : Fragment() {
                 ?.addOnSuccessListener { querySnapshot ->
                     if (!querySnapshot.isEmpty) {
                         val documentSnapshot = querySnapshot.documents[0]
-                        documentSnapshot.reference.delete()
+                        val documentReference = documentSnapshot.reference
+
+                        // Firebase Storage에서 삭제할 이미지 URL 가져오기
+                        val imageUrl = documentSnapshot.getString("imageUrl")
+
+                        documentReference.delete()
                             .addOnSuccessListener {
-                                // 글 삭제 성공 시 처리
+                                // Firebase Storage에서 이미지 삭제하기
+                                if (!imageUrl.isNullOrEmpty()) {
+                                    val storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(imageUrl)
+                                    storageRef.delete()
+                                }
+
                                 Toast.makeText(requireContext(), "글이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
 
-                                // 이전 화면으로 이동하며 갱신
+                                // 이전 화면으로 돌아가기
                                 requireActivity().onBackPressed()
                             }
                             .addOnFailureListener { e ->
-                                // 글 삭제 실패 시 처리
                                 Toast.makeText(requireContext(), "글 삭제에 실패했습니다.", Toast.LENGTH_SHORT).show()
                             }
                     } else {
-                        // 매칭되는 "contentId"를 가진 문서가 없을 경우 처리
                         Toast.makeText(requireContext(), "해당 글을 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
                     }
                 }
                 ?.addOnFailureListener { e ->
-                    // 조회 실패 시 처리
                     Toast.makeText(requireContext(), "글 조회에 실패했습니다.", Toast.LENGTH_SHORT).show()
                 }
         }
     }
-
 
     private fun showDetailInfo(view: View, contentDTO: ContentDTO) {
 
