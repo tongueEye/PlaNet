@@ -36,7 +36,6 @@ class CommentActivity : AppCompatActivity() {
 
         comment_btn_send?.setOnClickListener {
             var comment=ContentDTO.Comment()
-            comment.userId=FirebaseAuth.getInstance().currentUser?.email
             comment.uid=FirebaseAuth.getInstance().currentUser?.uid
             comment.comment=comment_edit_message.text.toString()
             comment.timestamp=System.currentTimeMillis()
@@ -129,7 +128,19 @@ class CommentActivity : AppCompatActivity() {
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             var view= holder.itemView
             view.commentviewitem_textview_comment.text=comments[position].comment
-            view.commentviewitem_textview_profile.text=comments[position].userId
+
+            // nickname을 보여줌
+            val uid = comments[position].uid // 댓글 작성자의 uid 가져오기
+            if (uid != null) {
+                FirebaseFirestore.getInstance().collection("infos").document(uid)
+                    .get()
+                    .addOnSuccessListener { documentSnapshot ->
+                        if (documentSnapshot.exists()) {
+                            val nickname = documentSnapshot.getString("nickname")
+                            view.commentviewitem_textview_profile.text = nickname // nickname을 보여줌
+                        }
+                    }
+            }
 
             // 댓글 작성자의 uid와 현재 사용자의 uid를 비교하여 같은지 확인
             val isCommentAuthor = comments[position].uid == FirebaseAuth.getInstance().currentUser?.uid

@@ -16,6 +16,7 @@ import com.example.planet_demo.AddPhotoActivity
 import com.example.planet_demo.R
 import com.example.planet_demo.navigation.model.AlarmDTO
 import com.example.planet_demo.navigation.model.ContentDTO
+import com.example.planet_demo.navigation.model.InfoDTO
 import com.example.planet_demo.navigation.util.FcmPush
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -139,7 +140,21 @@ class ItemDetailFragment : Fragment() {
 
     private fun showDetailInfo(view: View, contentDTO: ContentDTO) {
 
-        view.detailviewitem_profile_textview.text = contentDTO.userId
+        //view.detailviewitem_profile_textview.text = contentDTO.userId - 기존 코드
+
+        // 글 작성자의 uid로 저장된 "infos" 컬렉션에 접근하여 필드 값 가져오기
+        firestore?.collection("infos")?.document(contentDTO.uid.toString())?.get()?.addOnSuccessListener { documentSnapshot ->
+            if (documentSnapshot != null && documentSnapshot.exists()) {
+                val infoDTO = documentSnapshot.toObject(InfoDTO::class.java)
+
+                if (infoDTO != null) {
+                    // 글 작성자의 닉네임으로 설정
+                    view.detailviewitem_profile_textview.text = infoDTO.nickname
+                }
+            }
+        }
+
+
         view.detailviewitem_favoritecounter_textview.text="Likes "+contentDTO.favoriteCount.toString()
         view.detailviewitem_explain_textview.text = contentDTO.explain
 

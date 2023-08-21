@@ -7,12 +7,13 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="100dp">
+
         <ImageView
             android:id="@+id/account_iv_profile"
-            android:layout_alignParentLeft="true"
-            android:src="@drawable/ic_account"
             android:layout_width="100dp"
-            android:layout_height="100dp"/>
+            android:layout_height="100dp"
+            android:layout_alignParentLeft="true"
+            android:src="@drawable/ic_account" />
 
         <Button
             android:id="@+id/account_btn_follow_signout"
@@ -21,6 +22,7 @@
             android:layout_alignParentBottom="true"
             android:layout_toRightOf="@+id/account_iv_profile"
             android:text="@string/follow" />
+
         <LinearLayout
             android:gravity="center"
             android:layout_toRightOf="@+id/account_iv_profile"
@@ -77,6 +79,53 @@
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginRight="5dp"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/account_tv_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:text="@string/user_nickname"
+            android:textSize="25sp"
+            android:textStyle="bold"/>
+
+        <ImageView
+            android:id="@+id/profile_setting_btn"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/ic_setting" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/planner_btn"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_planner" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/account_tv_intro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/user_bio"
+        android:textSize="18sp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginBottom="15dp"
+        android:layout_marginRight="15dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/account_recyclerview"

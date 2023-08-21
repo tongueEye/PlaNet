@@ -32,7 +32,7 @@
             <EditText
                 android:id="@+id/email_edittext"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="43dp"
                 android:background="@drawable/rounded_edittext_background"
                 android:backgroundTint="@color/colorBlue"
                 android:hint="@string/email"
@@ -48,7 +48,7 @@
             <EditText
                 android:id="@+id/password_edittext"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="43dp"
                 android:background="@drawable/rounded_edittext_background"
                 android:backgroundTint="@color/colorBlue"
                 android:hint="@string/password"

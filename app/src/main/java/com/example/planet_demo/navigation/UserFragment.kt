@@ -18,6 +18,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.planet_demo.LoginActivity
 import com.example.planet_demo.MainActivity
 import com.example.planet_demo.R
+import com.example.planet_demo.SetInfoActivity
 import com.example.planet_demo.navigation.DetailViewFragment.DetailViewRecyclerViewAdapter.CustomViewHolder
 import com.example.planet_demo.navigation.model.AlarmDTO
 import com.example.planet_demo.navigation.model.ContentDTO
@@ -56,10 +57,37 @@ class UserFragment : Fragment(){
         if(uid==currentUserUid){
             //MyPage - 로그아웃 버튼이 보이게, 클릭시 로그아웃하고 로그인 화면으로 이동
             fragmentView?.account_btn_follow_signout?.text=getString(R.string.signout)
+            fragmentView?.profile_setting_btn?.visibility = View.VISIBLE // 설정 아이콘 보이기
             fragmentView?.account_btn_follow_signout?.setOnClickListener {
                 activity?.finish()
                 startActivity(Intent(activity,LoginActivity::class.java))
                 auth?.signOut()
+            }
+
+            // Firestore에서 "infos" 컬렉션에서 uid와 일치하는 문서를 가져옴
+            firestore?.collection("infos")?.document(uid!!)
+                ?.get()
+                ?.addOnSuccessListener { documentSnapshot ->
+                    if (documentSnapshot != null && documentSnapshot.exists()) {
+                        val nickname = documentSnapshot.getString("nickname")
+                        val bio = documentSnapshot.getString("bio")
+
+                        // 닉네임과 소개글 표시
+                        fragmentView?.account_tv_nickname?.text = nickname
+                        fragmentView?.account_tv_intro?.text = bio
+                    }
+                }
+            // 프로필 설정 아이콘 클릭 처리
+            fragmentView?.profile_setting_btn?.setOnClickListener {
+                Toast.makeText(context,"프로필 설정 버튼 클릭",Toast.LENGTH_LONG).show()
+                // 프로필 설정 화면으로 이동
+                startActivity(Intent(context, SetInfoActivity::class.java))
+            }
+            // 플래너 아이콘 클릭 처리
+            fragmentView?.planner_btn?.setOnClickListener {
+                Toast.makeText(context, "플래너 버튼 클릭", Toast.LENGTH_LONG).show()
+                // 플래너 화면으로 이동하는 로직 추가
+                // ...
             }
 
         }else{
@@ -74,9 +102,27 @@ class UserFragment : Fragment(){
             mainactivity?.toolbar_username?.visibility=View.VISIBLE
             mainactivity?.toolbar_btn_back?.visibility=View.VISIBLE
 
+            fragmentView?.profile_setting_btn?.visibility = View.GONE // 설정 아이콘 숨기기
+
             fragmentView?.account_btn_follow_signout?.setOnClickListener {
                 requestFollow()
             }
+
+            firestore?.collection("infos")?.document(uid!!)
+                ?.get()
+                ?.addOnSuccessListener { documentSnapshot ->
+                    if (documentSnapshot != null && documentSnapshot.exists()) {
+                        val nickname = documentSnapshot.getString("nickname")
+                        val bio = documentSnapshot.getString("bio")
+
+                        // 닉네임과 소개글 표시
+                        fragmentView?.account_tv_nickname?.text = nickname
+                        fragmentView?.account_tv_intro?.text = bio
+
+                        // 닉네임을 툴바의 TextView에 설정
+                        mainactivity?.toolbar_username?.text = nickname
+                    }
+                }
         }
 
         fragmentView?.account_recyclerview?.adapter=UserFragmentRecyclerViewAdapter()
@@ -84,6 +130,14 @@ class UserFragment : Fragment(){
 
         getProfileImage() //프로필 업로드
         getFollowerAndFollowing()
+
+        // 플래너 아이콘 클릭 처리
+        fragmentView?.planner_btn?.setOnClickListener {
+            Toast.makeText(context, "플래너 버튼 클릭", Toast.LENGTH_LONG).show()
+            // 플래너 화면으로 이동하는 로직 추가
+            // ...
+        }
+
         return fragmentView
     }
 

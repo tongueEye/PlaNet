@@ -38,6 +38,8 @@
     <string name="follow_cancel">Follow cancel</string>
     <string name="profile">Profile</string>
     <string name="count_0">0</string>
+    <string name="user_nickname">닉네임</string>
+    <string name="user_bio">소개글</string>
 
     <!-- Alarm -->
     <string name="alarm_favorite">님이 좋아요를 눌렀습니다.</string>

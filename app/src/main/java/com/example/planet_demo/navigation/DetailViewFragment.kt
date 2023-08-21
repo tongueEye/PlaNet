@@ -13,6 +13,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.planet_demo.R
 import com.example.planet_demo.navigation.model.AlarmDTO
 import com.example.planet_demo.navigation.model.ContentDTO
+import com.example.planet_demo.navigation.model.InfoDTO
 import com.example.planet_demo.navigation.util.FcmPush
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -71,7 +72,17 @@ class DetailViewFragment : Fragment(){
             var viewholder=(holder as CustomViewHolder).itemView
 
             //UserId
-            viewholder.detailviewitem_profile_textview.text=contentDTOs!![position].userId
+            //viewholder.detailviewitem_profile_textview.text=contentDTOs!![position].userId
+            // Get nickname from "infos" collection
+            FirebaseFirestore.getInstance().collection("infos").document(contentDTOs[position].uid!!).get().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val infoDTO = task.result?.toObject(InfoDTO::class.java)
+                    val nickname = infoDTO?.nickname
+
+                    // Display the nickname in the profile text view
+                    viewholder.detailviewitem_profile_textview.text = nickname ?: contentDTOs!![position].userId
+                }
+            }
 
             //Image
             Glide.with(holder.itemView.context).load(contentDTOs!![position].imageUrl).into(viewholder.detailviewitem_imageview_content)

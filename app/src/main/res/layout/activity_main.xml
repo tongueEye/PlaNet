@@ -16,10 +16,11 @@
             android:layout_height="match_parent">
             <ImageView
                 android:id="@+id/toolbar_btn_back"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_alignParentLeft="true"
-                android:layout_marginLeft="22dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="1dp"
                 android:src="@drawable/ic_arrow_back" />
             <TextView
                 android:id="@+id/toolbar_username"
@@ -29,7 +30,8 @@
                 android:gravity="center"
                 android:layout_toRightOf="@+id/toolbar_btn_back"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:layout_marginLeft="3dp"/>
 
             <ImageView
                 android:id="@+id/toolbar_title_image"
