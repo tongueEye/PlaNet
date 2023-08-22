@@ -1,17 +1,18 @@
 package com.example.planet_demo.navigation
 
+import android.app.Dialog
 import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -23,6 +24,7 @@ import com.example.planet_demo.navigation.DetailViewFragment.DetailViewRecyclerV
 import com.example.planet_demo.navigation.model.AlarmDTO
 import com.example.planet_demo.navigation.model.ContentDTO
 import com.example.planet_demo.navigation.model.FollowDTO
+import com.example.planet_demo.navigation.model.TodoDTO
 import com.example.planet_demo.navigation.util.FcmPush
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -30,6 +32,7 @@ import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_user.view.*
+import kotlinx.android.synthetic.main.item_todo.view.*
 
 class UserFragment : Fragment(){
     var fragmentView: View?=null
@@ -38,6 +41,10 @@ class UserFragment : Fragment(){
     var auth: FirebaseAuth?=null
     var currentUserUid:String?=null
     var followListenerRegistration:ListenerRegistration?=null
+
+    // 클래스 레벨 변수들
+    private var todoAdapter: TodoListAdapter? = null
+    private val todoList = ArrayList<TodoDTO>()
 
     companion object{
         var PICK_PROFILE_FROM_ALBUM=10
@@ -86,9 +93,31 @@ class UserFragment : Fragment(){
             // 플래너 아이콘 클릭 처리
             fragmentView?.planner_btn?.setOnClickListener {
                 Toast.makeText(context, "플래너 버튼 클릭", Toast.LENGTH_LONG).show()
-                // 플래너 화면으로 이동하는 로직 추가
-                // ...
+                // 플래너 버튼 클릭시 할 일 목록 다이얼로그를 띄움
+                showTodoListDialog()
             }
+            // RecyclerView와 어댑터 초기화
+            val todoRecyclerView = fragmentView?.findViewById<RecyclerView>(R.id.todoRecyclerView)
+            todoAdapter = TodoListAdapter(todoList)
+            todoRecyclerView?.layoutManager = LinearLayoutManager(requireContext())
+            todoRecyclerView?.adapter = todoAdapter
+
+            // Firestore에서 할 일 목록 데이터를 불러와서 todoList에 추가하는 코드
+            firestore?.collection("todolists")?.document(currentUserUid!!)
+                ?.collection("todos")
+                ?.orderBy("timestamp", Query.Direction.ASCENDING) // 오름차순 정렬
+                ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                    if (querySnapshot != null) {
+                        todoList.clear()
+                        for (document in querySnapshot.documents) {
+                            val todo = document.toObject(TodoDTO::class.java)
+                            if (todo != null) {
+                                todoList.add(todo)
+                            }
+                        }
+                        todoAdapter?.notifyDataSetChanged()
+                    }
+                }
 
         }else{
             //OtherUserPage - 팔로우 버튼이 보이게, 다른 유저의 아이디 표시, 뒤로가기 클릭시 홈화면으로 이동
@@ -132,13 +161,298 @@ class UserFragment : Fragment(){
         getFollowerAndFollowing()
 
         // 플래너 아이콘 클릭 처리
+        // 플래너 아이콘 클릭 처리
         fragmentView?.planner_btn?.setOnClickListener {
-            Toast.makeText(context, "플래너 버튼 클릭", Toast.LENGTH_LONG).show()
-            // 플래너 화면으로 이동하는 로직 추가
-            // ...
+            if (uid != currentUserUid) { // 현재 로그인한 사용자의 프로필이 아니라면
+                // 다른 사용자의 할 일 목록 다이얼로그 표시
+                showOtherUserTodoListDialog()
+            } else {
+                // 현재 로그인한 사용자의 할 일 목록 다이얼로그 표시
+                showTodoListDialog()
+            }
         }
 
         return fragmentView
+    }
+
+    private fun showOtherUserTodoListDialog() {
+        val dialog = Dialog(requireContext())
+        dialog.setContentView(R.layout.dialog_todo_list)
+        dialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+
+        val todoRecyclerView = dialog.findViewById<RecyclerView>(R.id.todoRecyclerView)
+        val otherUserTodoList = ArrayList<TodoDTO>()
+
+        // Firestore에서 다른 사용자의 할 일 목록 데이터를 불러오는 코드
+        firestore?.collection("todolists")?.document(uid!!)
+            ?.collection("todos")
+            ?.orderBy("timestamp", Query.Direction.ASCENDING) // 오름차순 정렬
+            ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+                if (querySnapshot != null) {
+                    otherUserTodoList.clear()
+                    for (document in querySnapshot.documents) {
+                        val todo = document.toObject(TodoDTO::class.java)
+                        if (todo != null) {
+                            otherUserTodoList.add(todo)
+                        }
+                    }
+                    // 어댑터 설정
+                    val otherUserTodoAdapter = OtherUserTodoListAdapter(otherUserTodoList)
+                    todoRecyclerView?.layoutManager = LinearLayoutManager(requireContext())
+                    todoRecyclerView?.adapter = otherUserTodoAdapter
+
+                    todoAdapter?.notifyDataSetChanged()
+                }
+            }
+
+        val closeImageView = dialog.findViewById<ImageView>(R.id.closeImageView)
+
+        // Close 버튼 클릭 시 다이얼로그 닫기
+        closeImageView.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        // 숨기는 부분 추가
+        val todoInputText = dialog.findViewById<EditText>(R.id.todoInputText)
+        val addTodoImageView = dialog.findViewById<ImageView>(R.id.addTodoImageView)
+        todoInputText.visibility = View.GONE
+        addTodoImageView.visibility = View.GONE
+
+        // 다이얼로그를 표시하기 위한 코드
+        dialog.show()
+    }
+
+    private inner class OtherUserTodoListAdapter(private val todos: ArrayList<TodoDTO>) :
+        RecyclerView.Adapter<OtherUserTodoListAdapter.TodoViewHolder>() {
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
+            val itemView = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_todo, parent, false)
+            return TodoViewHolder(itemView)
+        }
+
+        override fun onBindViewHolder(holder: TodoViewHolder, position: Int) {
+            val todo = todos[position]
+            holder.bind(todo)
+
+            // OtherUserPage에서는 optionsImageView를 숨깁니다.
+            holder.itemView.optionsImageView.visibility = View.GONE
+        }
+
+        override fun getItemCount(): Int {
+            return todos.size
+        }
+
+        inner class TodoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            fun bind(todo: TodoDTO) {
+                // 데이터를 UI 요소에 바인딩하는 부분
+                val todoTextView = itemView.findViewById<TextView>(R.id.todoTextView)
+                val checkBoxImageView = itemView.findViewById<ImageView>(R.id.todoCheckBoxImageView)
+
+                todoTextView.text = todo.todo
+                checkBoxImageView.setImageResource(
+                    if (todo.checked) R.drawable.ic_checkbox else R.drawable.ic_box
+                )
+            }
+        }
+    }
+
+    private fun showTodoListDialog() {
+        val dialog = Dialog(requireContext())
+        dialog.setContentView(R.layout.dialog_todo_list)
+        dialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+
+        val todoInputText = dialog.findViewById<EditText>(R.id.todoInputText)
+        val addTodoImageView = dialog.findViewById<ImageView>(R.id.addTodoImageView)
+        val closeImageView = dialog.findViewById<ImageView>(R.id.closeImageView)
+
+
+        // RecyclerView와 어댑터 초기화
+        val todoRecyclerView = dialog.findViewById<RecyclerView>(R.id.todoRecyclerView)
+        todoAdapter = TodoListAdapter(todoList)
+        todoRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        todoRecyclerView.adapter = todoAdapter
+
+        // 새로운 할 일을 추가하는 처리
+        addTodoImageView.setOnClickListener {
+            val todoText = todoInputText.text.toString().trim()
+            if (todoText.isNotEmpty()) {
+                val newTodo = TodoDTO(todo = todoText)
+                addTodoToFirestore(newTodo)
+                todoInputText.text.clear() // 입력 필드 초기화
+            }
+        }
+
+        // Close 버튼 클릭 시 다이얼로그 닫기
+        closeImageView.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        // 다이얼로그를 표시하기 위한 코드
+        dialog.show()
+    }
+
+    private fun addTodoToFirestore(newTodo: TodoDTO) {
+        val todoDocRef = firestore?.collection("todolists")?.document(currentUserUid!!)
+        val todosCollectionRef = todoDocRef?.collection("todos")
+
+        todosCollectionRef?.add(newTodo)?.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                // 할 일이 성공적으로 추가됨, UI 업데이트
+                todoList.add(newTodo)
+                todoAdapter?.notifyItemInserted(todoList.size - 1)
+
+                // Firestore에 추가된 데이터 반영
+                todosCollectionRef.document(task.result?.id ?: "").update("todoId", task.result?.id)
+            } else {
+                // 오류 처리
+                Toast.makeText(requireContext(), "할 일을 추가할 수 없습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun showPopupMenu(view: View, todo: TodoDTO) {
+        val popupMenu = PopupMenu(requireContext(), view)
+        popupMenu.inflate(R.menu.popup_menu_item) // 수정, 삭제 메뉴 포함한 XML 파일
+        popupMenu.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.menu_edit_option -> {
+                    // "수정" 메뉴 클릭 시 할 일 수정 동작 수행
+                    showEditTodoDialog(todo)
+                    true
+                }
+                R.id.menu_delete_option -> {
+                    // "삭제" 메뉴 클릭 시 할 일 삭제 동작 수행
+                    deleteTodoFromFirestore(todo)
+                    true
+                }
+                else -> false
+            }
+        }
+        popupMenu.show()
+    }
+
+    private fun showEditTodoDialog(todo: TodoDTO) {
+        val editDialog = Dialog(requireContext())
+        editDialog.setContentView(R.layout.item_edit_todo)
+
+        val todoEditText = editDialog.findViewById<EditText>(R.id.todoEditText)
+        val optionsImageView = editDialog.findViewById<ImageView>(R.id.optionsImageView)
+
+        // 기존 할 일 내용을 에딧텍스트에 설정
+        todoEditText.setText(todo.todo)
+
+        optionsImageView.setOnClickListener {
+            val updatedTodo = todoEditText.text.toString()
+            if (updatedTodo.isNotEmpty()) {
+                // 수정된 내용을 Firestore에 업데이트하고 UI 갱신
+                updateTodoInFirestore(todo.todoId, updatedTodo)
+                editDialog.dismiss()
+            } else {
+                // 내용이 비어있을 경우에 대한 처리
+                // 예: 사용자에게 알림 또는 처리 로직 추가
+            }
+        }
+
+        // 수정 다이얼로그를 표시하기 위한 코드
+        editDialog.show()
+    }
+
+    private fun updateTodoInFirestore(todoId: String, updatedTodo: String) {
+        // Firestore에서 해당 할 일 문서를 찾아 수정
+        firestore?.collection("todolists")?.document(currentUserUid!!)
+            ?.collection("todos")?.document(todoId)
+            ?.update("todo", updatedTodo)
+            ?.addOnSuccessListener {
+                // 수정 성공 시 UI 업데이트 처리
+                // 예: Toast 메시지 출력 또는 todoList 갱신
+            }
+            ?.addOnFailureListener { e ->
+                // 수정 실패 시 처리
+                // 예: Toast 메시지 출력 또는 오류 처리 로직
+            }
+    }
+
+    private fun deleteTodoFromFirestore(todo: TodoDTO) {
+        val todoDocRef = firestore?.collection("todolists")?.document(currentUserUid!!)
+        val todosCollectionRef = todoDocRef?.collection("todos")
+
+        todosCollectionRef?.document(todo.todoId)?.delete()
+            ?.addOnSuccessListener {
+                // 성공적으로 삭제되었을 때 UI 업데이트
+                todoList.remove(todo)
+                todoAdapter?.notifyDataSetChanged()
+            }
+            ?.addOnFailureListener { e ->
+                // 삭제 실패 처리
+                Toast.makeText(requireContext(), "할 일을 삭제할 수 없습니다.", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    inner class TodoListAdapter(private val todos: ArrayList<TodoDTO>) :
+        RecyclerView.Adapter<TodoListAdapter.TodoViewHolder>() {
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
+            val itemView = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_todo, parent, false)
+            return TodoViewHolder(itemView)
+        }
+
+        override fun onBindViewHolder(holder: TodoViewHolder, position: Int) {
+            val todo = todos[position]
+            holder.bind(todo)
+
+            // 옵션 버튼 클릭 시 팝업 메뉴 표시
+            holder.itemView.optionsImageView.setOnClickListener {
+                showPopupMenu(holder.itemView.optionsImageView, todo)
+            }
+        }
+
+        override fun getItemCount(): Int {
+            return todos.size
+        }
+
+        inner class TodoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            fun bind(todo: TodoDTO) {
+                // 데이터를 UI 요소에 바인딩하는 부분
+                val todoTextView = itemView.findViewById<TextView>(R.id.todoTextView)
+                val checkBoxImageView = itemView.findViewById<ImageView>(R.id.todoCheckBoxImageView)
+
+                todoTextView.text = todo.todo
+                checkBoxImageView.setImageResource(
+                    if (todo.checked) R.drawable.ic_checkbox else R.drawable.ic_box
+                )
+
+                checkBoxImageView.setOnClickListener {
+                    // 체크 여부 업데이트 및 UI 업데이트
+                    todo.checked = !todo.checked
+                    checkBoxImageView.setImageResource(
+                        if (todo.checked) R.drawable.ic_checkbox else R.drawable.ic_box
+                    )
+
+                    // Firestore에 checked 필드 업데이트
+                    updateTodoChecked(todo)
+                }
+            }
+        }
+
+        // Firestore에 checked 필드 업데이트하는 함수 추가
+        private fun updateTodoChecked(todo: TodoDTO) {
+            firestore?.collection("todolists")?.document(currentUserUid!!)
+                ?.collection("todos")?.document(todo.todoId)
+                ?.update("checked", todo.checked)
+                ?.addOnSuccessListener {
+                    Toast.makeText(context,"Todo checked updated successfully",Toast.LENGTH_LONG)
+                }?.addOnFailureListener { e ->
+                    Toast.makeText(context,"Error updating todo checked",Toast.LENGTH_LONG)
+                }
+        }
     }
 
     inner class UserFragmentRecyclerViewAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(){
@@ -329,6 +643,4 @@ class UserFragment : Fragment(){
             fragmentView?.account_iv_profile?.setOnClickListener(null)
         }
     }
-
-
 }
