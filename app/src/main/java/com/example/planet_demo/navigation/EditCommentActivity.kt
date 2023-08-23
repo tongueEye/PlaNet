@@ -59,17 +59,17 @@ class EditCommentActivity : AppCompatActivity() {
                 val commentDocument = querySnapshot.documents[0]
                 commentDocument.reference.update("comment", updatedComment)
                     .addOnSuccessListener {
-                        Toast.makeText(this, "Comment updated successfully", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "댓글이 수정되었습니다.", Toast.LENGTH_SHORT).show()
                         finish() // 작업 완료 후 액티비티 종료
                     }
                     .addOnFailureListener {
-                        Toast.makeText(this, "Failed to update comment", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "댓글 수정에 실패하였습니다.", Toast.LENGTH_SHORT).show()
                     }
             } else {
-                Toast.makeText(this, "Comment not found", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "댓글을 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
             }
         }.addOnFailureListener {
-            Toast.makeText(this, "Failed to fetch comment", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "댓글을 불러오는 데 실패하였습니다.", Toast.LENGTH_SHORT).show()
         }
     }
 }

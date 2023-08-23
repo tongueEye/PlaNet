@@ -99,22 +99,18 @@ class UserFragment : Fragment(){
                     when (menuItem.itemId) {
                         R.id.set_info_option -> {
                             // "프로필 설정" 메뉴 클릭 시 프로필 설정 화면으로 이동
-                            Toast.makeText(context,"프로필 설정 버튼 클릭",Toast.LENGTH_LONG).show()
                             startActivity(Intent(context, SetInfoActivity::class.java))
                             true
                         }
                         R.id.set_pw_option -> {
-                            // "비밀번호 재설정" 메뉴 클릭 시 해당 동작 수행
-                            Toast.makeText(context,"비밀번호 재설정 버튼 클릭",Toast.LENGTH_LONG).show()
-                            // Implement the logic for password reset here
+                            // "비밀번호 재설정" 메뉴 클릭 시 비밀번호 설정 화면으로 이동
                             startActivity(Intent(context, SetPwActivity::class.java))
                             true
                         }
                         R.id.remove_account_option -> {
-                            Toast.makeText(context,"삭제 옵션 메뉴 클릭",Toast.LENGTH_LONG).show()
+                            //"회원 탈퇴" 메뉴 클릭 시 (비밀번호 인증/회원 탈퇴) 화면으로 이동
                             val intent = Intent(context, CheckPasswordActivity::class.java)
                             startActivityForResult(intent, REQUEST_CODE_REMOVE_ACCOUNT)
-                            true
                             true
                         }
                         else -> false
@@ -638,17 +634,28 @@ class UserFragment : Fragment(){
     }
 
     fun followerAlarm(destinationUid: String){
-        var alarmDTO=AlarmDTO()
-        alarmDTO.destinationUid=destinationUid
-        alarmDTO.userId=auth?.currentUser?.email
-        alarmDTO.uid=auth?.currentUser?.uid
-        alarmDTO.kind=2
-        alarmDTO.timestamp=System.currentTimeMillis()
-        FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
+        var nicknameRef= currentUserUid?.let {
+            FirebaseFirestore.getInstance().collection("infos").document(
+                it
+            )
+        }
+        nicknameRef?.get()?.addOnSuccessListener { documentSnapshot ->
+            if (documentSnapshot.exists()){
+                val nickname=documentSnapshot.getString("nickname")
 
-        //팔로우 클릭시 FCM 메시지 생성
-        var message=auth?.currentUser?.email + getString(R.string.alarm_follow)
-        FcmPush.instance.sendMessage(destinationUid,"PlaNet",message)
+                var alarmDTO=AlarmDTO()
+                alarmDTO.destinationUid=destinationUid
+                alarmDTO.userId=nickname
+                alarmDTO.uid=auth?.currentUser?.uid
+                alarmDTO.kind=2
+                alarmDTO.timestamp=System.currentTimeMillis()
+                FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
+
+                //팔로우 클릭시 FCM 메시지 생성
+                var message=nickname + getString(R.string.alarm_follow)
+                FcmPush.instance.sendMessage(destinationUid,"PlaNet",message)
+            }
+        }
     }
 
     //firestore database에서 프로필 이미지 받아놈

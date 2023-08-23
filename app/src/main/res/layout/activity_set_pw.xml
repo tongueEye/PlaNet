@@ -76,10 +76,10 @@
         android:id="@+id/instruction_textview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="12dp"
         android:text="구글 로그인 계정은 구글 계정 비밀번호를 변경해주세요."
-        android:textSize="14sp" />
+        android:textSize="12sp" />
 
 </RelativeLayout>

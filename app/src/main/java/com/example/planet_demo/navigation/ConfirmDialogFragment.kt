@@ -28,13 +28,11 @@ class ConfirmDialogFragment(private val onConfirmListener: () -> Unit) : DialogF
             // 확인 버튼 클릭 처리
             confirmButton.setOnClickListener {
                 onConfirmListener.invoke()
-                Toast.makeText(context, "확인 버튼 클릭", Toast.LENGTH_SHORT).show()
                 dismiss()
             }
 
             // 취소 버튼 클릭 처리
             cancelButton.setOnClickListener {
-                Toast.makeText(context, "취소 버튼 클릭", Toast.LENGTH_SHORT).show()
                 dismiss()
             }
 

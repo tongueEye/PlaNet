@@ -35,7 +35,7 @@
         android:id="@+id/optionsImageView"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:src="@drawable/ic_menu"
+        android:src="@drawable/ic_option"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 

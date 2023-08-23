@@ -12,4 +12,12 @@
         <item name="android:textColor">@color/colorWhite</item>
     </style>
 
+    <style name="ButtonStyle2" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:background">@drawable/rounded_edittext_background</item>
+    </style>
+
+    <style name="ButtonStyle3" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:background">@drawable/rounded_edittext_background2</item>
+    </style>
+
 </resources>

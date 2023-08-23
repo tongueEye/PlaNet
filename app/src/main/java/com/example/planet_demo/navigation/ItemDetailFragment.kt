@@ -68,8 +68,6 @@ class ItemDetailFragment : Fragment() {
             when (menuItem.itemId) {
                 R.id.menu_edit_option -> {
                     // 글 수정 옵션을 클릭했을 때의 동작 처리
-                    Toast.makeText(requireContext(), "수정 버튼 클릭", Toast.LENGTH_SHORT).show()
-                    Toast.makeText(requireContext(), "수정 할 글: "+content_id, Toast.LENGTH_SHORT).show()
                     val editIntent = Intent(requireContext(), AddPhotoActivity::class.java)
                     editIntent.putExtra("edit_mode", true) // 수정 모드로 전달
                     editIntent.putExtra("content_id", content_id) // 수정할 글의 content_id 전달
@@ -81,7 +79,6 @@ class ItemDetailFragment : Fragment() {
                 }
                 R.id.menu_delete_option -> {
                     // 글 삭제 옵션을 클릭했을 때의 동작 처리
-                    Toast.makeText(requireContext(), "삭제 버튼 클릭", Toast.LENGTH_SHORT).show()
                     showDeleteConfirmDialog()
                     true
                 }
@@ -229,20 +226,18 @@ class ItemDetailFragment : Fragment() {
 
         if (contentDTO.favorites.containsKey(FirebaseAuth.getInstance().currentUser?.uid)) {
             // This is like status
-            favoriteImageView.setImageResource(R.drawable.ic_favorite)
+            favoriteImageView.setImageResource(R.drawable.ic_favorite_star)
         } else {
             // This is unlike status
-            favoriteImageView.setImageResource(R.drawable.ic_favorite_border)
+            favoriteImageView.setImageResource(R.drawable.ic_favorite_border_star)
         }
 
         favoriteImageView.setOnClickListener {
-            Toast.makeText(context, "좋아요 클릭!!", Toast.LENGTH_SHORT).show()
             favoriteEvent(contentDTO, view)
         }
     }
 
     private fun favoriteEvent(contentDTO: ContentDTO, view: View) {
-        Toast.makeText(context, contentDTO.contentId, Toast.LENGTH_SHORT).show()
 
         firestore?.collection("images")?.whereEqualTo("contentId", contentDTO.contentId)?.get()
             ?.addOnSuccessListener { querySnapshot ->
@@ -284,17 +279,26 @@ class ItemDetailFragment : Fragment() {
     }
 
     fun favoriteAlarm(destinationUid: String){
-        var alarmDTO= AlarmDTO()
-        alarmDTO.destinationUid=destinationUid
-        alarmDTO.userId=FirebaseAuth.getInstance().currentUser?.email
-        alarmDTO.uid=FirebaseAuth.getInstance().currentUser?.uid
-        alarmDTO.kind=0
-        alarmDTO.timestamp=System.currentTimeMillis()
-        FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
 
-        //좋아요 클릭시 FCM 메시지 생성
-        var message= FirebaseAuth.getInstance()?.currentUser?.email + " " +getString(R.string.alarm_favorite)
-        FcmPush.instance.sendMessage(destinationUid,"PlaNet",message)
+        var nicknameRef=FirebaseFirestore.getInstance().collection("infos").document(currentUserUid!!)
+        nicknameRef.get().addOnSuccessListener { documentSnapshot ->
+            if (documentSnapshot.exists()){
+                val nickname=documentSnapshot.getString("nickname")
+
+                var alarmDTO= AlarmDTO()
+                alarmDTO.destinationUid=destinationUid
+                alarmDTO.userId=nickname
+                //alarmDTO.userId=FirebaseAuth.getInstance().currentUser?.email
+                alarmDTO.uid=FirebaseAuth.getInstance().currentUser?.uid
+                alarmDTO.kind=0
+                alarmDTO.timestamp=System.currentTimeMillis()
+                FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
+
+                //좋아요 클릭시 FCM 메시지 생성
+                var message= nickname + " " +getString(R.string.alarm_favorite)
+                FcmPush.instance.sendMessage(destinationUid,"PlaNet",message)
+            }
+        }
     }
 
 

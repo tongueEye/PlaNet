@@ -11,12 +11,13 @@
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
         android:layout_height="35dp">
+
         <ImageView
-            android:src="@drawable/logo_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginTop="2dp"
             android:layout_marginBottom="2dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:src="@drawable/logo_title" />
     </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
@@ -29,32 +30,39 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/comment_recyclerview"
-        android:layout_marginTop="8dp"
-        android:layout_above="@+id/comment_input_layout"
-        android:layout_below="@id/toolbar_division"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_above="@+id/comment_input_layout"
+        android:layout_below="@id/toolbar_division"
+        android:layout_marginTop="2dp"
+        android:layout_weight="1" />
 
     <LinearLayout
         android:id="@+id/comment_input_layout"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="5dp"
+        style="@style/ButtonStyle2"
+        android:orientation="horizontal">
 
         <EditText
             android:id="@+id/comment_edit_message"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:layout_weight="1"
-            android:layout_margin="10dp"/>
+            android:hint="댓글을 입력하세요."/>
 
         <Button
             android:id="@+id/comment_btn_send"
-            android:text="@string/send"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"/>
+            android:background="@drawable/ic_send"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="10dp"
+            android:textSize="18dp" />
     </LinearLayout>
 </RelativeLayout>

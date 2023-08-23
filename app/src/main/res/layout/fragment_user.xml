@@ -13,12 +13,18 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_alignParentLeft="true"
-            android:src="@drawable/ic_account" />
+            android:src="@drawable/ic_account"
+            android:layout_margin="3dp"/>
 
         <Button
             android:id="@+id/account_btn_follow_signout"
+            style="@style/ButtonStyle2"
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/colorBlue"
+            android:textSize="15dp"
             android:layout_alignParentBottom="true"
             android:layout_toRightOf="@+id/account_iv_profile"
             android:text="@string/follow" />
@@ -93,15 +99,15 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:text="@string/user_nickname"
-            android:textSize="25sp"
+            android:textSize="20sp"
             android:textStyle="bold"/>
 
         <ImageView
             android:id="@+id/profile_setting_btn"
             android:layout_width="22dp"
             android:layout_height="22dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="3dp"
             android:src="@drawable/ic_setting" />
 
         <Space
@@ -122,7 +128,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/user_bio"
-        android:textSize="18sp"
+        android:textSize="13sp"
+        android:layout_marginTop="3dp"
         android:layout_marginLeft="15dp"
         android:layout_marginBottom="15dp"
         android:layout_marginRight="15dp"/>

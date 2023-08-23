@@ -22,18 +22,19 @@
         app:layout_constraintStart_toEndOf="@id/detailviewitem_profile_image"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.6"
+        android:textSize="15dp"
         android:layout_marginLeft="10dp"/>
 
     <ImageView
         android:id="@+id/detailviewitem_menu_image"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:src="@drawable/ic_menu"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/ic_option2"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/detailviewitem_profile_image"
         android:layout_marginEnd="10dp"
-        android:layout_marginTop="8dp"/>
+        android:layout_marginTop="5dp"/>
 
     <ImageView
         android:id="@+id/detailviewitem_imageview_content"
@@ -49,7 +50,7 @@
         android:id="@+id/detailviewitem_favorite_imageview"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:src="@drawable/ic_favorite_border"
+        android:src="@drawable/ic_favorite_border_star"
         app:layout_constraintTop_toBottomOf="@id/detailviewitem_imageview_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/detailviewitem_favoritecounter_textview"
@@ -60,8 +61,8 @@
         android:id="@+id/detailviewitem_comment_imageview"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_marginTop="8dp"
-        android:src="@drawable/ic_chat_black"
+        android:layout_marginTop="9dp"
+        android:src="@drawable/ic_chat"
         app:layout_constraintBottom_toTopOf="@id/detailviewitem_favoritecounter_textview"
         app:layout_constraintStart_toEndOf="@+id/detailviewitem_favorite_imageview"
         app:layout_constraintTop_toBottomOf="@id/detailviewitem_imageview_content"
@@ -84,6 +85,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Explain content"
+        android:textSize="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/detailviewitem_favoritecounter_textview"
         android:layout_marginTop="8dp"

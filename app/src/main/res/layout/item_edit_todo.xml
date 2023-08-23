@@ -14,6 +14,8 @@
         android:layout_marginTop="5dp"
         android:text="할 일 수정"
         android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/colorBlue"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -33,10 +35,10 @@
     <!-- 옵션 버튼 모양을 나타내는 이미지뷰 -->
     <ImageView
         android:id="@+id/optionsImageView"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_marginTop="50dp"
-        android:src="@drawable/ic_ok"
+        android:src="@drawable/ic_ok3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/todoEditText"
         app:layout_constraintTop_toTopOf="parent" />

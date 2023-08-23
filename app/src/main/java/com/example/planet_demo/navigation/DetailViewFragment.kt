@@ -72,7 +72,6 @@ class DetailViewFragment : Fragment(){
             var viewholder=(holder as CustomViewHolder).itemView
 
             //UserId
-            //viewholder.detailviewitem_profile_textview.text=contentDTOs!![position].userId
             // Get nickname from "infos" collection
             FirebaseFirestore.getInstance().collection("infos").document(contentDTOs[position].uid!!).get().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -104,7 +103,6 @@ class DetailViewFragment : Fragment(){
                     Glide.with(holder.itemView.context).load(url).apply(RequestOptions().circleCrop()).into(viewholder.detailviewitem_profile_image)
                 }
             }
-            //Glide.with(holder.itemView.context).load(contentDTOs!![position].imageUrl).into(viewholder.detailviewitem_profile_image) //기존 코드
 
             //This code is when the button is clicked
             viewholder.detailviewitem_favorite_imageview.setOnClickListener {
@@ -113,11 +111,11 @@ class DetailViewFragment : Fragment(){
             //this code is when the page is loaded
             if (contentDTOs!![position].favorites.containsKey(uid)){
                 //This is like status
-                viewholder.detailviewitem_favorite_imageview.setImageResource(R.drawable.ic_favorite)
+                viewholder.detailviewitem_favorite_imageview.setImageResource(R.drawable.ic_favorite_star)
 
             }else{
                 //This is unlike status
-                viewholder.detailviewitem_favorite_imageview.setImageResource(R.drawable.ic_favorite_border)
+                viewholder.detailviewitem_favorite_imageview.setImageResource(R.drawable.ic_favorite_border_star)
             }
 
             //This code is when the profile image
@@ -162,17 +160,30 @@ class DetailViewFragment : Fragment(){
        }
 
         fun favoriteAlarm(destinationUid: String){
-            var alarmDTO=AlarmDTO()
-            alarmDTO.destinationUid=destinationUid
-            alarmDTO.userId=FirebaseAuth.getInstance().currentUser?.email
-            alarmDTO.uid=FirebaseAuth.getInstance().currentUser?.uid
-            alarmDTO.kind=0
-            alarmDTO.timestamp=System.currentTimeMillis()
-            FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
+            var nicknameRef=
+                FirebaseAuth.getInstance().currentUser?.uid?.let {
+                    FirebaseFirestore.getInstance().collection("infos").document(
+                        it
+                    )
+                }
+            nicknameRef?.get()?.addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()){
+                    val nickname=documentSnapshot.getString("nickname")
 
-            //좋아요 클릭시 FCM 메시지 생성
-            var message= FirebaseAuth.getInstance()?.currentUser?.email + " " +getString(R.string.alarm_favorite)
-            FcmPush.instance.sendMessage(destinationUid,"PlaNet",message)
+                    var alarmDTO=AlarmDTO()
+                    alarmDTO.destinationUid=destinationUid
+                    alarmDTO.userId=nickname
+                    //alarmDTO.userId=FirebaseAuth.getInstance().currentUser?.email
+                    alarmDTO.uid=FirebaseAuth.getInstance().currentUser?.uid
+                    alarmDTO.kind=0
+                    alarmDTO.timestamp=System.currentTimeMillis()
+                    FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
+
+                    //좋아요 클릭시 FCM 메시지 생성
+                    var message= nickname + " " +getString(R.string.alarm_favorite)
+                    FcmPush.instance.sendMessage(destinationUid,"PlaNet",message)
+                }
+            }
         }
 
         override fun getItemCount(): Int {

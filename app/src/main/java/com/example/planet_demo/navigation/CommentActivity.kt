@@ -68,19 +68,31 @@ class CommentActivity : AppCompatActivity() {
 
                         //만약 작성자의 uid가 현재 로그인한 사용자의 uid와 다르다면, 즉 댓글을 단 사용자가 게시물 작성자가 아니라면, 아래 내용을 실행
                         if (destinationUid != FirebaseAuth.getInstance().currentUser?.uid) {
-                            //댓글을 단 사용자가 게시물 작성자가 아닌 경우, 알람 데이터 alarmDTO를 생성하고 Firebase Firestore의 "alarms" 컬렉션에 추가
-                            val alarmDTO = AlarmDTO()
-                            alarmDTO.destinationUid = destinationUid
-                            alarmDTO.userId = FirebaseAuth.getInstance().currentUser?.email
-                            alarmDTO.uid = FirebaseAuth.getInstance().currentUser?.uid
-                            alarmDTO.kind = 1
-                            alarmDTO.timestamp = System.currentTimeMillis()
-                            alarmDTO.message = message
-                            FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
 
-                            // 또한 FCM 메시지를 생성하여 게시물 작성자에게 보내는 FcmPush 객체를 이용하여 전송
-                            val msg = FirebaseAuth.getInstance().currentUser?.email + " " + getString(R.string.alarm_comment) + " : " + message
-                            FcmPush.instance.sendMessage(destinationUid!!, "PlaNet", msg)
+                            var nicknameRef= FirebaseAuth.getInstance().currentUser?.uid?.let { it1 ->
+                                FirebaseFirestore.getInstance().collection("infos").document(
+                                    it1
+                                )
+                            }
+                            nicknameRef?.get()?.addOnSuccessListener {documentSnapshot->
+                                if (documentSnapshot.exists()){
+                                    val nickname=documentSnapshot.getString("nickname")
+
+                                    //댓글을 단 사용자가 게시물 작성자가 아닌 경우, 알람 데이터 alarmDTO를 생성하고 Firebase Firestore의 "alarms" 컬렉션에 추가
+                                    val alarmDTO = AlarmDTO()
+                                    alarmDTO.destinationUid = destinationUid
+                                    alarmDTO.userId = nickname
+                                    alarmDTO.uid = FirebaseAuth.getInstance().currentUser?.uid
+                                    alarmDTO.kind = 1
+                                    alarmDTO.timestamp = System.currentTimeMillis()
+                                    alarmDTO.message = message
+                                    FirebaseFirestore.getInstance().collection("alarms").document().set(alarmDTO)
+
+                                    // 또한 FCM 메시지를 생성하여 게시물 작성자에게 보내는 FcmPush 객체를 이용하여 전송
+                                    val msg = nickname + " " + getString(R.string.alarm_comment) + " : " + message
+                                    FcmPush.instance.sendMessage(destinationUid!!, "PlaNet", msg)
+                                }
+                            }
                         }
                     }
                 }
@@ -167,7 +179,6 @@ class CommentActivity : AppCompatActivity() {
                                 // 예: 댓글 수정 화면으로 이동
                                 val commentId = comments[position].commentId // 수정할 댓글의 고유 ID
                                 val comment = comments[position].comment // 기존 댓글 내용
-                                val userId=comments[position].userId // 유저 아이디
                                 val uid = comments[position].uid.toString() // 사용자의 uid 가져오기
 
                                 val profileImageRef = FirebaseFirestore.getInstance()
@@ -176,11 +187,18 @@ class CommentActivity : AppCompatActivity() {
 
                                 profileImageRef.get().addOnSuccessListener { documentSnapshot ->
                                     if (documentSnapshot.exists()) {
-                                        val imageUrl = documentSnapshot.getString("image")
-                                        // imageUrl을 사용하여 작업 수행
-                                        if (comment != null) {
-                                            navigateToEditComment(commentId, comment, imageUrl, userId)
+                                        val imageUrl = documentSnapshot.getString("image") // imageUrl을 사용하여 작업 수행
+
+                                        val nicknameRef=FirebaseFirestore.getInstance()
+                                            .collection("infos")
+                                            .document(uid)
+                                        nicknameRef.get().addOnSuccessListener { documentSnapshot ->
+                                            val nickname = documentSnapshot.getString("nickname")
+                                            if (comment != null) {
+                                                navigateToEditComment(commentId, comment, imageUrl, nickname)
+                                            }
                                         }
+
                                     } else {
                                         // 문서가 없을 경우의 처리
                                         Toast.makeText(baseContext,"문서가 존재하지 않습니다.",Toast.LENGTH_LONG)

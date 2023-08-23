@@ -106,7 +106,6 @@ class AlarmFragment : Fragment(){
             view.alarmviewitem_delete_btn.setOnClickListener {
                 val confirmDialog = ConfirmDialogFragment{
                     deleteAlarm(position, alarmDTO.alarmId)
-                    Toast.makeText(context, alarmDTO.alarmId, Toast.LENGTH_SHORT).show()
                 }
                 confirmDialog.show(childFragmentManager,"confirm_dialog")
             }
@@ -131,12 +130,12 @@ class AlarmFragment : Fragment(){
                                     notifyItemRemoved(position)
                                 }
                                 notifyDataSetChanged() // 리사이클러뷰의 데이터 변경을 알려주어 화면이 업데이트된다.
-                                Toast.makeText(context, "삭제 성공했습니다!", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "알림을 삭제했습니다.", Toast.LENGTH_SHORT).show()
                             }
                             .addOnFailureListener { exception ->
                                 //삭제 실패 시 처리
                                 //삭제 성공 또는 실패에 따라 해당 메시지를 토스트 메시지로 표시
-                                Toast.makeText(context, "삭제 실패했습니다!", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "알림 삭제 실패!", Toast.LENGTH_SHORT).show()
                             }
                     }
                 }

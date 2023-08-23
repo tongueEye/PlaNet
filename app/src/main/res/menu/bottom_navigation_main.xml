@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/action_home"
-        android:icon="@drawable/ic_home"
+        android:icon="@drawable/ic_home2"
         android:enabled="true"
         android:title="@string/home"/>
     <item
         android:id="@+id/action_search"
-        android:icon="@drawable/ic_search"
+        android:icon="@drawable/ic_search2"
         android:enabled="true"
         android:title="@string/search"/>
     <item
@@ -17,7 +17,7 @@
         android:title="@string/upload_image"/>
     <item
         android:id="@+id/action_favorite_alarm"
-        android:icon="@drawable/ic_favorite_border"
+        android:icon="@drawable/ic_favorite_border_star"
         android:enabled="true"
         android:title="@string/favorite"/>
     <item
