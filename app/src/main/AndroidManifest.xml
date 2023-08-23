@@ -39,6 +39,11 @@
         <activity
             android:name=".SetInfoActivity"
             android:label="Set Info" />
+        <activity
+            android:name=".navigation.SetPwActivity"
+            android:label="Set Pw" />
+        <activity android:name=".navigation.CheckPasswordActivity"
+            android:label="Check Pw"/>
         <activity android:name=".MainActivity" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    tools:context=".LoginActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/set_info_layout"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="110dp"
+        android:src="@drawable/password_setting" />
+
+    <LinearLayout
+        android:id="@+id/set_info_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="200dp"
+        android:orientation="vertical">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp">
+
+            <EditText
+                android:id="@+id/new_password_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:inputType="textPassword"
+                android:background="@drawable/rounded_edittext_background"
+                android:backgroundTint="@color/colorBlue"
+                android:hint="@string/new_pw"
+                android:padding="9dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp">
+
+            <EditText
+                android:id="@+id/new_password_check_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:inputType="textPassword"
+                android:background="@drawable/rounded_edittext_background"
+                android:backgroundTint="@color/colorBlue"
+                android:hint="@string/new_pw_check"
+                android:padding="9dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/set_password_button"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginBottom="35dp"
+            android:background="@drawable/rounded_button_background"
+            android:backgroundTint="@color/colorBlue"
+            android:text="@string/set_password"
+            android:textSize="17dp"
+            android:textColor="@color/colorWhite"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/instruction_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:text="구글 로그인 계정은 구글 계정 비밀번호를 변경해주세요."
+        android:textSize="14sp" />
+
+</RelativeLayout>

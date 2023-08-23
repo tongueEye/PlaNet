@@ -1,9 +1,11 @@
 package com.example.planet_demo.navigation
 
 import android.app.Dialog
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +28,7 @@ import com.example.planet_demo.navigation.model.ContentDTO
 import com.example.planet_demo.navigation.model.FollowDTO
 import com.example.planet_demo.navigation.model.TodoDTO
 import com.example.planet_demo.navigation.util.FcmPush
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
@@ -48,6 +51,7 @@ class UserFragment : Fragment(){
 
     companion object{
         var PICK_PROFILE_FROM_ALBUM=10
+        const val REQUEST_CODE_REMOVE_ACCOUNT = 1001
     }
 
     override fun onCreateView(
@@ -84,11 +88,41 @@ class UserFragment : Fragment(){
                         fragmentView?.account_tv_intro?.text = bio
                     }
                 }
-            // 프로필 설정 아이콘 클릭 처리
+            // 설정 아이콘 클릭 처리
             fragmentView?.profile_setting_btn?.setOnClickListener {
-                Toast.makeText(context,"프로필 설정 버튼 클릭",Toast.LENGTH_LONG).show()
-                // 프로필 설정 화면으로 이동
-                startActivity(Intent(context, SetInfoActivity::class.java))
+                // Create a PopupMenu
+                val popupMenu = PopupMenu(requireContext(), it)
+                popupMenu.inflate(R.menu.popup_menu_item3) // Use the popup_menu_item3.xml
+
+                // Set click listener for menu items
+                popupMenu.setOnMenuItemClickListener { menuItem ->
+                    when (menuItem.itemId) {
+                        R.id.set_info_option -> {
+                            // "프로필 설정" 메뉴 클릭 시 프로필 설정 화면으로 이동
+                            Toast.makeText(context,"프로필 설정 버튼 클릭",Toast.LENGTH_LONG).show()
+                            startActivity(Intent(context, SetInfoActivity::class.java))
+                            true
+                        }
+                        R.id.set_pw_option -> {
+                            // "비밀번호 재설정" 메뉴 클릭 시 해당 동작 수행
+                            Toast.makeText(context,"비밀번호 재설정 버튼 클릭",Toast.LENGTH_LONG).show()
+                            // Implement the logic for password reset here
+                            startActivity(Intent(context, SetPwActivity::class.java))
+                            true
+                        }
+                        R.id.remove_account_option -> {
+                            Toast.makeText(context,"삭제 옵션 메뉴 클릭",Toast.LENGTH_LONG).show()
+                            val intent = Intent(context, CheckPasswordActivity::class.java)
+                            startActivityForResult(intent, REQUEST_CODE_REMOVE_ACCOUNT)
+                            true
+                            true
+                        }
+                        else -> false
+                    }
+                }
+
+                // Show the popup menu
+                popupMenu.show()
             }
             // 플래너 아이콘 클릭 처리
             fragmentView?.planner_btn?.setOnClickListener {

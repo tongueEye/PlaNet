@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    tools:context=".LoginActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/set_info_layout"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="110dp"
+        android:src="@drawable/remove_account"/>
+
+    <LinearLayout
+        android:id="@+id/set_info_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="200dp"
+        android:orientation="vertical">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp">
+
+            <EditText
+                android:id="@+id/check_password_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:inputType="textPassword"
+                android:background="@drawable/rounded_edittext_background"
+                android:backgroundTint="@color/colorBlue"
+                android:hint="@string/current_pw"
+                android:padding="9dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/remove_account_button"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginBottom="35dp"
+            android:background="@drawable/rounded_button_background"
+            android:backgroundTint="@color/colorBlue"
+            android:text="@string/remove_check"
+            android:textSize="17dp"
+            android:textColor="@color/colorWhite"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/instruction_textview2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        android:text="'회원 탈퇴'버튼을 누르면 별도의 안내없이 바로 탈퇴 처리 됩니다."
+        android:textSize="14sp" />
+
+</RelativeLayout>

@@ -10,17 +10,19 @@
         <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/drawable/rounded_dialog_background.xml" value="0.1345" />
         <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/drawable/rounded_edittext_background.xml" value="0.1055" />
         <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/activity_add_photo.xml" value="0.22" />
+        <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/activity_check_pw.xml" value="0.20729166666666668" />
         <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/activity_comment.xml" value="0.20625" />
         <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/activity_login.xml" value="0.22" />
         <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/activity_main.xml" value="0.16666666666666666" />
         <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/activity_set_info.xml" value="0.22" />
+        <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/activity_set_pw.xml" value="0.24739583333333334" />
         <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/dialog_confirm.xml" value="0.25316455696202533" />
         <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/dialog_delete_confirm.xml" value="0.32395833333333335" />
         <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/dialog_todo_list.xml" value="0.22" />
         <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/fragment_alarm.xml" value="0.23333333333333334" />
         <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/fragment_detail.xml" value="0.16666666666666666" />
         <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/fragment_grid.xml" value="0.23333333333333334" />
-        <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/fragment_user.xml" value="0.22" />
+        <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/fragment_user.xml" value="0.16666666666666666" />
         <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/item_alarm.xml" value="0.22" />
         <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/item_comment.xml" value="0.22" />
         <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/layout/item_detail.xml" value="0.22" />
@@ -30,6 +32,7 @@
         <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/menu/bottom_navigation_main.xml" value="0.27708333333333335" />
         <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/menu/popup_menu_item.xml" value="0.32395833333333335" />
         <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/menu/popup_menu_item2.xml" value="0.325" />
+        <entry key="..\:/src/flutterwork/PlaNet_demo/app/src/main/res/menu/popup_menu_item3.xml" value="0.24739583333333334" />
       </map>
     </option>
   </component>
