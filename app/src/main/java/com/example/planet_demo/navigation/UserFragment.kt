@@ -122,7 +122,6 @@ class UserFragment : Fragment(){
             }
             // 플래너 아이콘 클릭 처리
             fragmentView?.planner_btn?.setOnClickListener {
-                Toast.makeText(context, "플래너 버튼 클릭", Toast.LENGTH_LONG).show()
                 // 플래너 버튼 클릭시 할 일 목록 다이얼로그를 띄움
                 showTodoListDialog()
             }
@@ -478,9 +477,9 @@ class UserFragment : Fragment(){
                 ?.collection("todos")?.document(todo.todoId)
                 ?.update("checked", todo.checked)
                 ?.addOnSuccessListener {
-                    Toast.makeText(context,"Todo checked updated successfully",Toast.LENGTH_LONG)
+                    //Todo checked updated successfully
                 }?.addOnFailureListener { e ->
-                    Toast.makeText(context,"Error updating todo checked",Toast.LENGTH_LONG)
+                    //Error updating todo checked
                 }
         }
     }

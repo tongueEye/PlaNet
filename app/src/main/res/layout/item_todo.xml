@@ -4,15 +4,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
+    android:padding="14dp"
     android:layout_marginTop="5dp"
     android:background="@drawable/rounded_button_background2">
 
     <!-- 체크박스 모양을 나타내는 이미지뷰 -->
     <ImageView
         android:id="@+id/todoCheckBoxImageView"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="22dp"
+        android:layout_height="22dp"
         android:src="@drawable/ic_box"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
@@ -23,7 +23,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="할 일 목록"
-        android:textSize="18sp"
+        android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@id/todoCheckBoxImageView"
         app:layout_constraintEnd_toStartOf="@id/optionsImageView"
         app:layout_constraintTop_toTopOf="parent"
