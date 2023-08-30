@@ -18,10 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.example.planet_demo.LoginActivity
-import com.example.planet_demo.MainActivity
-import com.example.planet_demo.R
-import com.example.planet_demo.SetInfoActivity
+import com.example.planet_demo.*
 import com.example.planet_demo.navigation.DetailViewFragment.DetailViewRecyclerViewAdapter.CustomViewHolder
 import com.example.planet_demo.navigation.model.AlarmDTO
 import com.example.planet_demo.navigation.model.ContentDTO
@@ -120,6 +117,44 @@ class UserFragment : Fragment(){
                 // Show the popup menu
                 popupMenu.show()
             }
+
+            // 별똥별 버튼 설정
+            val shootingStarBtn = fragmentView?.findViewById<ImageView>(R.id.shootingstar_btn)
+            shootingStarBtn?.let {
+                // Firestore에서 현재 유저의 uid와 일치하는 "images" 컬렉션의 문서들을 가져와서 총 favoriteCount 계산
+                firestore?.collection("images")
+                    ?.whereEqualTo("uid", uid)
+                    ?.get()
+                    ?.addOnSuccessListener { querySnapshot ->
+                        var totalStarCount = 0
+                        for (document in querySnapshot.documents) {
+                            val content = document.toObject(ContentDTO::class.java)
+                            content?.let {
+                                totalStarCount += it.favoriteCount
+                            }
+                        }
+
+                        // totalStarCount에 따라 이미지 설정
+                        val drawableId = when (totalStarCount) {
+                            in 0..9 -> R.drawable.ic_shooting_star1
+                            in 10..29 -> R.drawable.ic_shooting_star2
+                            in 30..49 -> R.drawable.ic_shooting_star3
+                            in 50..99 -> R.drawable.ic_shooting_star4
+                            in 100..149 -> R.drawable.ic_shooting_star5
+                            in 150..199 -> R.drawable.ic_shooting_star6
+                            in 200..299 -> R.drawable.ic_shooting_star7
+                            else -> R.drawable.ic_shooting_star8
+                        }
+
+                        // 버튼에 이미지 설정
+                        it.setImageResource(drawableId)
+                    }
+            }
+
+            //별똥별 아이콘 클릭 처리
+            fragmentView?.shootingstar_btn?.setOnClickListener {
+                showShootingStarDialog()
+            }
             // 플래너 아이콘 클릭 처리
             fragmentView?.planner_btn?.setOnClickListener {
                 // 플래너 버튼 클릭시 할 일 목록 다이얼로그를 띄움
@@ -189,7 +224,43 @@ class UserFragment : Fragment(){
         getProfileImage() //프로필 업로드
         getFollowerAndFollowing()
 
-        // 플래너 아이콘 클릭 처리
+        // 별똥별 버튼 설정
+        val shootingStarBtn = fragmentView?.findViewById<ImageView>(R.id.shootingstar_btn)
+        shootingStarBtn?.let {
+            // Firestore에서 현재 유저의 uid와 일치하는 "images" 컬렉션의 문서들을 가져와서 총 favoriteCount 계산
+            firestore?.collection("images")
+                ?.whereEqualTo("uid", uid)
+                ?.get()
+                ?.addOnSuccessListener { querySnapshot ->
+                    var totalStarCount = 0
+                    for (document in querySnapshot.documents) {
+                        val content = document.toObject(ContentDTO::class.java)
+                        content?.let {
+                            totalStarCount += it.favoriteCount
+                        }
+                    }
+
+                    // totalStarCount에 따라 이미지 설정
+                    val drawableId = when (totalStarCount) {
+                        in 0..9 -> R.drawable.ic_shooting_star1
+                        in 10..29 -> R.drawable.ic_shooting_star2
+                        in 30..49 -> R.drawable.ic_shooting_star3
+                        in 50..99 -> R.drawable.ic_shooting_star4
+                        in 100..149 -> R.drawable.ic_shooting_star5
+                        in 150..199 -> R.drawable.ic_shooting_star6
+                        in 200..299 -> R.drawable.ic_shooting_star7
+                        else -> R.drawable.ic_shooting_star8
+                    }
+
+                    // 버튼에 이미지 설정
+                    it.setImageResource(drawableId)
+                }
+        }
+
+        //별똥별 아이콘 클릭 처리
+        fragmentView?.shootingstar_btn?.setOnClickListener {
+            showShootingStarDialog()
+        }
         // 플래너 아이콘 클릭 처리
         fragmentView?.planner_btn?.setOnClickListener {
             if (uid != currentUserUid) { // 현재 로그인한 사용자의 프로필이 아니라면
@@ -327,6 +398,94 @@ class UserFragment : Fragment(){
         dialog.show()
     }
 
+    private fun showShootingStarDialog() {
+        val dialog = Dialog(requireContext())
+        dialog.setContentView(R.layout.dialog_shooting_star)
+        dialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+
+        val starCountText = dialog.findViewById<TextView>(R.id.starCountTextView)
+        val starCountImageView = dialog.findViewById<ImageView>(R.id.starCountImageView)
+        val closeImageView = dialog.findViewById<ImageView>(R.id.closeImageView)
+        val helpImageView = dialog.findViewById<ImageView>(R.id.helpImageView)
+
+        // 현재 페이지가 로그인한 사용자의 페이지인 경우에만 describeImageView를 보이도록 설정
+        if (uid == currentUserUid) {
+            helpImageView?.visibility = View.VISIBLE
+        } else {
+            helpImageView?.visibility = View.GONE
+        }
+
+        // Firestore에서 현재 유저의 uid와 일치하는 "images" 컬렉션의 문서들을 가져와서 총 favoriteCount 계산
+        firestore?.collection("images")
+            ?.whereEqualTo("uid", uid)
+            ?.get()
+            ?.addOnSuccessListener { querySnapshot ->
+                var totalStarCount = 0
+                for (document in querySnapshot.documents) {
+                    val content = document.toObject(ContentDTO::class.java)
+                    content?.let {
+                        totalStarCount += it.favoriteCount
+                    }
+                }
+
+                // 계산된 totalStarCount를 starCountText에 표시
+                starCountText.text = totalStarCount.toString()
+
+                // 별똥별 개수에 따라 다른 아이콘 설정
+                if (totalStarCount in 0..9) {
+                    starCountImageView.setImageResource(R.drawable.ic_shooting_star1)
+                } else if (totalStarCount in 10..29) {
+                    starCountImageView.setImageResource(R.drawable.ic_shooting_star2)
+                } else if (totalStarCount in 30..49) {
+                    starCountImageView.setImageResource(R.drawable.ic_shooting_star3)
+                } else if (totalStarCount in 50..99) {
+                    starCountImageView.setImageResource(R.drawable.ic_shooting_star4)
+                } else if (totalStarCount in 100..149) {
+                    starCountImageView.setImageResource(R.drawable.ic_shooting_star5)
+                } else if (totalStarCount in 150..199) {
+                    starCountImageView.setImageResource(R.drawable.ic_shooting_star6)
+                } else if (totalStarCount in 200..299) {
+                    starCountImageView.setImageResource(R.drawable.ic_shooting_star7)
+                } else {
+                    starCountImageView.setImageResource(R.drawable.ic_shooting_star8)
+                }
+            }
+
+        // Help 버튼 클릭 시 Level에 대한 안내창 띄우기
+        helpImageView.setOnClickListener {
+            showLevelHelpDialog()
+        }
+
+        // Close 버튼 클릭 시 다이얼로그 닫기
+        closeImageView.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        // 다이얼로그를 표시하기 위한 코드
+        dialog.show()
+    }
+
+    private fun showLevelHelpDialog() {
+        val dialog = Dialog(requireContext())
+        dialog.setContentView(R.layout.dialog_level)
+        dialog.window?.setLayout(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        val closeImageView = dialog.findViewById<ImageView>(R.id.closeImageView)
+
+        // Close 버튼 클릭 시 다이얼로그 닫기
+        closeImageView.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        // 다이얼로그를 표시하기 위한 코드
+        dialog.show()
+    }
+
     private fun addTodoToFirestore(newTodo: TodoDTO) {
         val todoDocRef = firestore?.collection("todolists")?.document(currentUserUid!!)
         val todosCollectionRef = todoDocRef?.collection("todos")
@@ -348,9 +507,15 @@ class UserFragment : Fragment(){
 
     private fun showPopupMenu(view: View, todo: TodoDTO) {
         val popupMenu = PopupMenu(requireContext(), view)
-        popupMenu.inflate(R.menu.popup_menu_item) // 수정, 삭제 메뉴 포함한 XML 파일
+        popupMenu.inflate(R.menu.popup_menu_item4) // 수정, 삭제 메뉴 포함한 XML 파일
         popupMenu.setOnMenuItemClickListener { menuItem ->
             when (menuItem.itemId) {
+                R.id.menu_add_photo_option -> {
+                    Toast.makeText(context,"인증샷 추가 버튼 클릭",Toast.LENGTH_LONG).show()
+                    openAddPhotoActivity(todo.todo)
+                    true
+                }
+
                 R.id.menu_edit_option -> {
                     // "수정" 메뉴 클릭 시 할 일 수정 동작 수행
                     showEditTodoDialog(todo)
@@ -391,6 +556,14 @@ class UserFragment : Fragment(){
 
         // 수정 다이얼로그를 표시하기 위한 코드
         editDialog.show()
+    }
+
+    private fun openAddPhotoActivity(todoContent: String?) {
+        val intent = Intent(requireContext(), AddPhotoActivity::class.java)
+        if(todoContent!=null){
+            intent.putExtra("todo_content",todoContent)
+        }
+        startActivity(intent)
     }
 
     private fun updateTodoInFirestore(todoId: String, updatedTodo: String) {

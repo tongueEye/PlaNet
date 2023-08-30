@@ -28,13 +28,14 @@ class ItemDetailFragment : Fragment() {
     private var firestore: FirebaseFirestore? = null
     var content_id: String?=null
     var currentUserUid: String? = null // 추가: 현재 사용자의 UID를 저장할 변수
+    private var contentDTO: ContentDTO?=null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var view=LayoutInflater.from(activity).inflate(R.layout.item_detail,container,false)
+        var view=LayoutInflater.from(activity).inflate(R.layout.item_detail_scroll,container,false)
         firestore = FirebaseFirestore.getInstance()
         content_id = arguments?.getString("cid")
         currentUserUid = FirebaseAuth.getInstance().currentUser?.uid // 현재 사용자의 UID 가져오기
@@ -43,7 +44,7 @@ class ItemDetailFragment : Fragment() {
             firestore?.collection("images")?.whereEqualTo("contentId", content_id)?.get()?.addOnSuccessListener { querySnapshot ->
                 if (!querySnapshot.isEmpty) {
                     val documentSnapshot = querySnapshot.documents[0] // 여기서는 첫 번째 문서를 가져옴
-                    val contentDTO = documentSnapshot.toObject(ContentDTO::class.java)
+                    contentDTO = documentSnapshot.toObject(ContentDTO::class.java)
                     contentDTO?.let { showDetailInfo(view, it) }
                 }
             }
@@ -71,6 +72,7 @@ class ItemDetailFragment : Fragment() {
                     val editIntent = Intent(requireContext(), AddPhotoActivity::class.java)
                     editIntent.putExtra("edit_mode", true) // 수정 모드로 전달
                     editIntent.putExtra("content_id", content_id) // 수정할 글의 content_id 전달
+                    editIntent.putExtra("content_text",contentDTO?.explain)
                     startActivity(editIntent)
 
                     requireActivity().onBackPressed()

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_add_photo_option"
+        android:title="인증샷 올리기" />
+
+    <item
+        android:id="@+id/menu_edit_option"
+        android:title="수정" />
+
+    <item
+        android:id="@+id/menu_delete_option"
+        android:title="삭제" />
+
+</menu>

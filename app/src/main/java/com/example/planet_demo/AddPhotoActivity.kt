@@ -39,6 +39,23 @@ class AddPhotoActivity : AppCompatActivity() {
         // Check if in edit mode
         val editMode = intent.getBooleanExtra("edit_mode", false)
 
+        val contentId = intent.getStringExtra("content_id")
+        val contentText = intent.getStringExtra("content_text")
+
+        // 수정 모드로 진입한 경우 contentText를 입력 필드에 설정
+        if (editMode) {
+            // contentText를 입력 필드에 설정
+            addphoto_edit_explain.setText(contentText)
+        }
+
+
+        // Get the content of the to do list item
+        val todoContent=intent.getStringExtra("todo_content")
+        if(todoContent!=null){
+            //Set the to do list item's content as the default text in the EditText
+            addphoto_edit_explain.setText(todoContent)
+        }
+
         //Open the album
         var photoPickerIntent=Intent(Intent.ACTION_PICK)
         photoPickerIntent.type="image/*"

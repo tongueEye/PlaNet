@@ -42,7 +42,7 @@
     <string name="user_bio">소개글</string>
 
     <!-- Alarm -->
-    <string name="alarm_favorite">님이 좋아요를 눌렀습니다.</string>
+    <string name="alarm_favorite">님이 별똥별을 남겼습니다.</string>
     <string name="alarm_comment">님이 댓글을 남겼습니다.</string>
     <string name="alarm_follow">님이 팔로우를 시작했습니다.</string>
 
@@ -78,5 +78,9 @@
     <!--remove account-->
     <string name="current_pw">현재 비밀번호 입력</string>
     <string name="remove_check">회원 탈퇴</string>
+
+    <!--shooting star dialog-->
+    <string name="shooting_star_title">수집한 별똥별</string>
+    <string name="level">LEVEL</string>
 
 </resources>

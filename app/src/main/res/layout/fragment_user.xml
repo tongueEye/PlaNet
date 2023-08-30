@@ -116,6 +116,13 @@
             android:layout_weight="1" />
 
         <ImageView
+            android:id="@+id/shootingstar_btn"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_shooting_star"/>
+
+        <ImageView
             android:id="@+id/planner_btn"
             android:layout_width="32dp"
             android:layout_height="32dp"
