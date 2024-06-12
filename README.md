@@ -1,3 +1,26 @@
+# PlaNet
+
+* 기간
+
+
+### 기획의도
+
+
+
+### 프로젝트 목표
+
+### 기술스택
+
+### 브랜드 및 컨셉
+
+### 주요기능
+
+### 세부 구현 기능
+(화면 gif)
+
+### 스토리보드
+
+
 ![스토리라인](https://github.com/tongueEye/PlaNet/assets/109783402/26ef0c18-1a12-4743-8aa2-58907d8467ab)
 ![스토리보드1](https://github.com/tongueEye/PlaNet/assets/109783402/7d7e8413-0baf-4ab7-9ce3-59025e90fc80)
 ![스토리보드2](https://github.com/tongueEye/PlaNet/assets/109783402/e5447b08-00d0-4d38-8af1-4106f9269749)
