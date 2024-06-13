@@ -8,7 +8,7 @@
 
 
 <div align="center">
-  <h2>🌟 기획배경</h2> 
+  <h3>🌟기획배경🌟</h3> 
 </div>
 
 
@@ -17,7 +17,9 @@
 ![기획배경수정3](https://github.com/tongueEye/PlaNet/assets/109783402/de1be121-6373-4ae4-ba14-d53c35dbc85c)
 
 
-### 🌟 기대효과
+<div align="center">
+  <h3>🌟기대효과🌟</h3> 
+</div>
 
 ![기대효과수정](https://github.com/tongueEye/PlaNet/assets/109783402/f9d29cfd-3bb7-4526-ad6a-849860ea7934)
 
