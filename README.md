@@ -10,7 +10,6 @@
 
   ### 🌟 기획배경
 
-
 ![기획배경수정1](https://github.com/tongueEye/PlaNet/assets/109783402/9856a07f-7ee3-4278-93a8-3482c02db6ea)
 ![기획배경수정2](https://github.com/tongueEye/PlaNet/assets/109783402/dbe183d7-824d-46d9-a35c-c587f387d8a9)
 ![기획배경수정3](https://github.com/tongueEye/PlaNet/assets/109783402/de1be121-6373-4ae4-ba14-d53c35dbc85c)
@@ -27,6 +26,7 @@
 
 
 ### 🌟 기술스택
+
 ![Kotlin](https://img.shields.io/badge/Kotlin-007396?style=for-the-badge&logo=kotlin&logoColor=white)
 ![Android Studio](https://img.shields.io/badge/Android_Studio-3DDC84?style=for-the-badge&logo=android-studio&logoColor=white)
 ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
@@ -36,9 +36,11 @@
 
 ![브랜드및컨셉](https://github.com/tongueEye/PlaNet/assets/109783402/789c2d02-b2a2-4afe-8940-25732ab41b07)
 
+
 ### 🌟 포지셔닝 분석
 
 ![포지셔닝 분석](https://github.com/tongueEye/PlaNet/assets/109783402/82748b63-e719-4c5f-8135-5483355997f8)
+
 
 ### 🌟 SWOT 분석
 
@@ -56,7 +58,9 @@
 
 
 ### 🌟 세부 구현 기능
+
 (화면 gif)
+
 
 ### 🌟 스토리보드
 
@@ -71,3 +75,4 @@
 ![스토리보드8](https://github.com/tongueEye/PlaNet/assets/109783402/0d4212d8-1505-4e02-a232-d7aeab33cdcb)
 ![스토리보드9](https://github.com/tongueEye/PlaNet/assets/109783402/c2372ea6-9010-44ea-81ed-f2c0445b07a0)
 ![스토리보드10](https://github.com/tongueEye/PlaNet/assets/109783402/ded2452a-6236-4c65-a404-d4e5d78a7245)
+
