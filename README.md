@@ -39,7 +39,7 @@
 
 ### 🌟 포지셔닝 분석
 
-![포지셔닝 분석](https://github.com/tongueEye/PlaNet/assets/109783402/82748b63-e719-4c5f-8135-5483355997f8)
+![포지셔닝 분석 수정](https://github.com/tongueEye/PlaNet/assets/109783402/9e4071f1-0c64-4375-af61-97d2a4e96e6d)
 
 
 ### 🌟 SWOT 분석
