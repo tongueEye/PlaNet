@@ -9,11 +9,11 @@
 
 ### 기획배경
 
-<img src="https://github.com/tongueEye/PlaNet/assets/109783402/ba11edc8-6e84-4a9f-b590-aaf57a85a4fb" alt="기획배경1" width:100% >
+<img src="https://github.com/tongueEye/PlaNet/assets/109783402/ba11edc8-6e84-4a9f-b590-aaf57a85a4fb" alt="기획배경1" width=100% >
 
-<img src="https://github.com/tongueEye/PlaNet/assets/109783402/664584e0-e315-429e-9e99-9dd689b14479" alt="기획배경2" width:100% >
+<img src="https://github.com/tongueEye/PlaNet/assets/109783402/664584e0-e315-429e-9e99-9dd689b14479" alt="기획배경2" width=100% >
 
-<img src="https://github.com/tongueEye/PlaNet/assets/109783402/8fdf36f1-9017-4aa7-a289-fc7333fd5df3" alt="기획배경3" width:100% >
+<img src="https://github.com/tongueEye/PlaNet/assets/109783402/8fdf36f1-9017-4aa7-a289-fc7333fd5df3" alt="기획배경3" width=100% >
 
 
 ### 기대효과
