@@ -8,7 +8,7 @@
 
 
 <div style="text-align: center;">
-### 🌟 기획배경
+  ### 🌟 기획배경
 </div>
 
 
