@@ -23,11 +23,12 @@
 </div>
 
 ![기대효과수정](https://github.com/tongueEye/PlaNet/assets/109783402/f9d29cfd-3bb7-4526-ad6a-849860ea7934)
-
+![기대효과재수정1](https://github.com/tongueEye/PlaNet/assets/109783402/2f85c58d-4ef2-4c01-83a7-8950c00388d9)
 
 ### 🌟 기획의도
 
 ![기획의도수정](https://github.com/tongueEye/PlaNet/assets/109783402/07216efe-f3e9-45a3-a176-0dfd800803c6)
+![기획의도재수정](https://github.com/tongueEye/PlaNet/assets/109783402/136931c3-8536-4297-91c9-512b0e44c89a)
 
 
 ### 🌟 기술스택
