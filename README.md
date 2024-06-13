@@ -7,13 +7,9 @@
 * 주요 타겟: 할 일 관리에 관심있는 개인, 목표 설정과 도전에 동기 부여를 필요로 하는 사람들
 
 
-<div style="text-align: center;">
-  ### 🌟 기획배경
-</div>
 
-<div style="text-align: center;">
-## 테스트
-</div>
+  ### 🌟 기획배경
+
 
 ![기획배경수정1](https://github.com/tongueEye/PlaNet/assets/109783402/9856a07f-7ee3-4278-93a8-3482c02db6ea)
 ![기획배경수정2](https://github.com/tongueEye/PlaNet/assets/109783402/dbe183d7-824d-46d9-a35c-c587f387d8a9)
