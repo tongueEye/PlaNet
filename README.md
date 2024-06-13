@@ -21,6 +21,7 @@
 <div align="center">
   <h3>🌟기대효과🌟</h3> 
 </div>
+
 ![기대효과재재수정](https://github.com/tongueEye/PlaNet/assets/109783402/d8847d6c-8518-49ba-86c1-979d50575124)
 
 ### 🌟 기획의도
