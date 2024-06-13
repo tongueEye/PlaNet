@@ -8,9 +8,9 @@
 
 
 <div align="center">
- <h2>🌟 기획배경</h2> 
+  <h2>🌟 기획배경</h2> 
 </div>
-  ### 🌟 기획배경
+
 
 ![기획배경수정1](https://github.com/tongueEye/PlaNet/assets/109783402/9856a07f-7ee3-4278-93a8-3482c02db6ea)
 ![기획배경수정2](https://github.com/tongueEye/PlaNet/assets/109783402/dbe183d7-824d-46d9-a35c-c587f387d8a9)
