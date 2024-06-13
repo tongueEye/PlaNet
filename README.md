@@ -11,10 +11,9 @@
   <h3>🌟기획배경🌟</h3> 
 </div>
 
-
-![기획배경수정1](https://github.com/tongueEye/PlaNet/assets/109783402/9856a07f-7ee3-4278-93a8-3482c02db6ea)
-![기획배경수정2](https://github.com/tongueEye/PlaNet/assets/109783402/dbe183d7-824d-46d9-a35c-c587f387d8a9)
-![기획배경수정3](https://github.com/tongueEye/PlaNet/assets/109783402/de1be121-6373-4ae4-ba14-d53c35dbc85c)
+![기획배경재수정1](https://github.com/tongueEye/PlaNet/assets/109783402/cc52b37a-3cf5-4318-ba0a-399fb4b35a1a)
+![기획배경재수정2](https://github.com/tongueEye/PlaNet/assets/109783402/f04e929d-e41f-4c7f-83bd-84530c366c0a)
+![기획배경재수정3](https://github.com/tongueEye/PlaNet/assets/109783402/b72d5943-474c-4751-916c-0514c8a9d438)
 
 
 <div align="center">
