@@ -14,31 +14,47 @@
 ![기획배경수정3](https://github.com/tongueEye/PlaNet/assets/109783402/de1be121-6373-4ae4-ba14-d53c35dbc85c)
 
 
-
 ### 👽 기대효과
 
+![기대효과수정](https://github.com/tongueEye/PlaNet/assets/109783402/f9d29cfd-3bb7-4526-ad6a-849860ea7934)
 
 
 ### 👽 기획의도
 
+![기획의도수정](https://github.com/tongueEye/PlaNet/assets/109783402/07216efe-f3e9-45a3-a176-0dfd800803c6)
+
 
 ### 👽 기술스택
 
+
+
 ### 👽 브랜드 및 컨셉
+
+![브랜드및컨셉](https://github.com/tongueEye/PlaNet/assets/109783402/789c2d02-b2a2-4afe-8940-25732ab41b07)
 
 ### 👽 포지셔닝 분석
 
+![포지셔닝 분석](https://github.com/tongueEye/PlaNet/assets/109783402/82748b63-e719-4c5f-8135-5483355997f8)
+
 ### 👽 SWOT 분석
 
-### 👽 4P 분석
+![swot분석수정1](https://github.com/tongueEye/PlaNet/assets/109783402/1aca52b5-2754-4859-952e-740cd2cc9d95)
+![swot분석수정2](https://github.com/tongueEye/PlaNet/assets/109783402/1a01caff-db11-43b2-8e5d-8ada3996923d)
+
 
 ### 👽 주요기능
+
+![주요기능0](https://github.com/tongueEye/PlaNet/assets/109783402/1b6f0d88-145e-463b-9515-fbbff4aaedc4)
+![주요기능1](https://github.com/tongueEye/PlaNet/assets/109783402/8e0c2421-79db-4d03-9985-e75bf7dd9e62)
+![주요기능2](https://github.com/tongueEye/PlaNet/assets/109783402/64961200-0b21-467c-9625-d1a15dd72381)
+![주요기능3](https://github.com/tongueEye/PlaNet/assets/109783402/8920d4b2-df03-4f98-96cd-255ee6c774dd)
+![주요기능4](https://github.com/tongueEye/PlaNet/assets/109783402/f048a15b-ec58-4d6f-97a0-91648bff6e4e)
+
 
 ### 👽 세부 구현 기능
 (화면 gif)
 
 ### 👽 스토리보드
-
 
 ![스토리라인](https://github.com/tongueEye/PlaNet/assets/109783402/26ef0c18-1a12-4743-8aa2-58907d8467ab)
 ![스토리보드1](https://github.com/tongueEye/PlaNet/assets/109783402/7d7e8413-0baf-4ab7-9ce3-59025e90fc80)
