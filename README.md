@@ -12,7 +12,9 @@
 </div>
 
 ![기획배경재수정1](https://github.com/tongueEye/PlaNet/assets/109783402/cc52b37a-3cf5-4318-ba0a-399fb4b35a1a)
+
 ![기획배경재수정2](https://github.com/tongueEye/PlaNet/assets/109783402/f04e929d-e41f-4c7f-83bd-84530c366c0a)
+
 ![기획배경재수정3](https://github.com/tongueEye/PlaNet/assets/109783402/b72d5943-474c-4751-916c-0514c8a9d438)
 
 
