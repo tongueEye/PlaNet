@@ -26,13 +26,15 @@
 </div>
 
 ![기대효과재재수정](https://github.com/tongueEye/PlaNet/assets/109783402/d8847d6c-8518-49ba-86c1-979d50575124)
-
+  
+#
 <div align="center">
   <h3>🌟기획의도🌟</h3> 
 </div>
 
 ![기획의도재수정](https://github.com/tongueEye/PlaNet/assets/109783402/136931c3-8536-4297-91c9-512b0e44c89a)
-
+  
+#
 <div align="center">
   <h3>🌟기술스택🌟</h3> 
 </div>
@@ -45,27 +47,31 @@
   ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
   
 </div>
-
-
+  
+#
 <div align="center">
   <h3>🌟브랜드 및 컨셉🌟</h3> 
 </div>
 
 ![브랜드및컨셉](https://github.com/tongueEye/PlaNet/assets/109783402/789c2d02-b2a2-4afe-8940-25732ab41b07)
-
+  
+#
 <div align="center">
   <h3>🌟포지셔닝 분석🌟</h3> 
 </div>
 
 ![포지셔닝 분석 수정](https://github.com/tongueEye/PlaNet/assets/109783402/9e4071f1-0c64-4375-af61-97d2a4e96e6d)
 
+  
+#
 <div align="center">
   <h3>🌟SWOT 분석🌟</h3> 
 </div>
 
 ![swot분석수정1](https://github.com/tongueEye/PlaNet/assets/109783402/1aca52b5-2754-4859-952e-740cd2cc9d95)
 ![swot분석수정2](https://github.com/tongueEye/PlaNet/assets/109783402/1a01caff-db11-43b2-8e5d-8ada3996923d)
-
+  
+#
 <div align="center">
   <h3>🌟주요기능🌟</h3> 
 </div>
@@ -76,12 +82,15 @@
 ![주요기능3](https://github.com/tongueEye/PlaNet/assets/109783402/8920d4b2-df03-4f98-96cd-255ee6c774dd)
 ![주요기능4](https://github.com/tongueEye/PlaNet/assets/109783402/f048a15b-ec58-4d6f-97a0-91648bff6e4e)
 
+  
+#
 <div align="center">
   <h3>🌟세부 구현 기능🌟</h3> 
 </div>
 
 (화면 gif)
-
+  
+#
 <div align="center">
   <h3>🌟스토리보드🌟</h3> 
 </div>
