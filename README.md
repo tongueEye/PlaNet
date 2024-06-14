@@ -1,3 +1,5 @@
+![image](https://github.com/tongueEye/PlaNet/assets/109783402/01b98bf1-0ba8-4986-b4a9-bd35169dbe4e)
+
 # 🪐계획으로 만들어가는 나만의 행성, PlaNet
 
 * 개인 프로젝트
