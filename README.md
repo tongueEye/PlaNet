@@ -26,36 +26,43 @@
 
 ![기대효과재재수정](https://github.com/tongueEye/PlaNet/assets/109783402/d8847d6c-8518-49ba-86c1-979d50575124)
 
-### 🌟 기획의도
+<div align="center">
+  <h3>🌟기획의도🌟</h3> 
+</div>
 
 ![기획의도재수정](https://github.com/tongueEye/PlaNet/assets/109783402/136931c3-8536-4297-91c9-512b0e44c89a)
 
-
-### 🌟 기술스택
+<div align="center">
+  <h3>🌟기술스택🌟</h3> 
+</div>
 
 ![Kotlin](https://img.shields.io/badge/Kotlin-007396?style=for-the-badge&logo=kotlin&logoColor=white)
 ![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
 ![Android Studio](https://img.shields.io/badge/Android_Studio-3DDC84?style=for-the-badge&logo=android-studio&logoColor=white)
 ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
 
-
-### 🌟 브랜드 및 컨셉
+<div align="center">
+  <h3>🌟브랜드 및 컨셉🌟</h3> 
+</div>
 
 ![브랜드및컨셉](https://github.com/tongueEye/PlaNet/assets/109783402/789c2d02-b2a2-4afe-8940-25732ab41b07)
 
-
-### 🌟 포지셔닝 분석
+<div align="center">
+  <h3>🌟포지셔닝 분석🌟</h3> 
+</div>
 
 ![포지셔닝 분석 수정](https://github.com/tongueEye/PlaNet/assets/109783402/9e4071f1-0c64-4375-af61-97d2a4e96e6d)
 
-
-### 🌟 SWOT 분석
+<div align="center">
+  <h3>🌟SWOT 분석🌟</h3> 
+</div>
 
 ![swot분석수정1](https://github.com/tongueEye/PlaNet/assets/109783402/1aca52b5-2754-4859-952e-740cd2cc9d95)
 ![swot분석수정2](https://github.com/tongueEye/PlaNet/assets/109783402/1a01caff-db11-43b2-8e5d-8ada3996923d)
 
-
-### 🌟 주요기능
+<div align="center">
+  <h3>🌟주요기능🌟</h3> 
+</div>
 
 ![주요기능0](https://github.com/tongueEye/PlaNet/assets/109783402/1b6f0d88-145e-463b-9515-fbbff4aaedc4)
 ![주요기능1](https://github.com/tongueEye/PlaNet/assets/109783402/8e0c2421-79db-4d03-9985-e75bf7dd9e62)
@@ -63,13 +70,15 @@
 ![주요기능3](https://github.com/tongueEye/PlaNet/assets/109783402/8920d4b2-df03-4f98-96cd-255ee6c774dd)
 ![주요기능4](https://github.com/tongueEye/PlaNet/assets/109783402/f048a15b-ec58-4d6f-97a0-91648bff6e4e)
 
-
-### 🌟 세부 구현 기능
+<div align="center">
+  <h3>🌟세부 구현 기능🌟</h3> 
+</div>
 
 (화면 gif)
 
-
-### 🌟 스토리보드
+<div align="center">
+  <h3>🌟스토리보드🌟</h3> 
+</div>
 
 ![스토리라인](https://github.com/tongueEye/PlaNet/assets/109783402/26ef0c18-1a12-4743-8aa2-58907d8467ab)
 ![스토리보드1](https://github.com/tongueEye/PlaNet/assets/109783402/7d7e8413-0baf-4ab7-9ce3-59025e90fc80)
