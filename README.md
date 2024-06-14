@@ -1,7 +1,7 @@
-![image](https://github.com/tongueEye/PlaNet/assets/109783402/01b98bf1-0ba8-4986-b4a9-bd35169dbe4e)
 
 # 🪐계획으로 만들어가는 나만의 행성, PlaNet
 
+![image](https://github.com/tongueEye/PlaNet/assets/109783402/01b98bf1-0ba8-4986-b4a9-bd35169dbe4e)
 * 개인 프로젝트
 * 프로젝트 기간: '23.08.01~'23.08.31
 * 프로젝트 목표: 사용자들에게 할 일 관리 기능을 제공하고, 인증샷-별똥별 시스템과 레벨 시스템을 통해 할 일 관리를 더욱 재미있게 할 수 있는 소셜 네트워킹 플랫폼 개발
